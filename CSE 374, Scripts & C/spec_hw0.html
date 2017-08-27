@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- THIS IS A MACHINE-GENERATED/MAINTAINED FILE. YOU CAN MANUALLY EDIT CONTENT
+   - ONLY BETWEEN HTML COMMENTS begin HTML content" AND "end HTML content"
+   - OTHER CHANGES WILL BE LOST! TO MAINTAIN, 
+   - USE http://www.cs.washington.edu/htbin-post/content-tool.cgi. -->
+ <title>CSE 374 - Homework 0 - Winter 2015</title>
+ <link rel="stylesheet" href="/home/cse2012.css" type="text/css">
+<!--[if IE]>
+<style type="text/css" media="all">@import url("/home/cse2012ie.css");</style>
+<![endif]-->
+  <!--[if lte IE 7]>
+<style type="text/css" media="all">@import url("/home/cse2012ie7.css");</style>
+<![endif]-->
+  <!--[if lte IE 6]>
+<style type="text/css" media="all">@import url("/home/cse2012ie6.css");</style>
+<![endif]-->
+</head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-9 node-type-page section-faculty-candidates">
+<div id="page-wrapper">
+ <div id="page">
+  <div id="header">
+   <div class="section clearfix">
+    <div class="region region-purple-banner">
+     <div id="block-block-71" class="block block-block first odd">
+      <div class="content"><a href="//www.washington.edu/"><img src="/images/purple_w.png" alt="university of washington logo" /></a></div>
+     </div><!-- /.block -->
+     <div id="block-menu-menu-top-purple-banner" class="block block-menu first last odd">
+      <div class="content">
+<ul class="menu">
+ <li class="first leaf"><a href="//www.cs.washington.edu/about_us" title="">ABOUT US</a></li>
+ <li class="leaf"><a href="//www.cs.washington.edu/contact" title="">CONTACT US</a></li>
+ <li class="leaf"><a href="https://norfolk.cs.washington.edu/mycse" title="">MY CSE</a></li>
+ <li class="last leaf"><a href="https://www.cs.washington.edu/internal" title="">INTERNAL</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+    <div class="region region-header">
+     <div id="block-block-64" class="block block-block first odd">
+      <div class="content">
+<a href="/" title="Home" rel="home" id="logo"><img src="/images/cse_banner_0.png" alt="Home" /></a>
+      </div>
+     </div><!-- /.block -->
+     <div id="block-nice-menus-1" class="block block-nice-menus last odd">
+      <div class="content">
+<ul class="nice-menu nice-menu-down" id="nice-menu-1">
+<li id="nice-menu-id-news_events" class="menu-news_events menuparent first"><a href="//www.cs.washington.edu/news_events">News &amp;<br>Events</a></li>
+<li id="nice-menu-id-people" class="menu-people menuparent"><a href="//www.cs.washington.edu/people">People</a></li>
+<li id="nice-menu-id-education" class="menu-education menuparent"><a href="//www.cs.washington.edu/education">Education</a></li>
+<li id="nice-menu-id-research" class="menu-research menuparent"><a href="//www.cs.washington.edu/research">Research</a></li>
+<li id="nice-menu-id-students" class="menu-students menuparent"><a href="//www.cs.washington.edu/students">Current<br>Students</a></li>
+<li id="nice-menu-id-prospective_students" class="menu-prospective_students menuparent"><a href="//www.cs.washington.edu/prospective_students">Prospective<br>Students</a></li>
+<li id="nice-menu-id-faculty_candidates" class="menu-faculty_candidates menuparent"><a href="//www.cs.washington.edu/faculty_candidates">Faculty<br>Candidates</a></li>
+<li id="nice-menu-id-alumni" class="menu-alumni menuparent"><a href="//www.cs.washington.edu/alumni">Alumni</a></li>
+<li id="nice-menu-id-industrial_affiliates" class="menu-industrial_affiliates menuparent"><a href="//www.cs.washington.edu/industrial_affiliates">Industry<br>Affiliates</a></li>
+<li id="nice-menu-id-supportcse" class="menu-supportcse menuparent"><a href="//www.cs.washington.edu/supportcse">Support<br>CSE</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+   </div><!-- section -->
+  </div><!-- /.section, /#header -->
+<div id="main-wrapper">
+ <div id="main" class="clearfix with-navigation">
+  <div id="content" class="column">
+   <div class="section">
+<h1 class="title" id="page-title">CSE 374 - Homework 0 - Winter 2015</h1>
+<!--begin HTML content-->
+<p><strong>Due: Wednesday, January 7, at 11 pm
+(you <em>really <u>really</u> </em>don't want to burn up late days on this one!).</strong>
+<p>The  purpose of this assignment is to be sure that you have your Linux
+  environment set up for the quarter and that you can log in and execute shell
+  commands. We recommend that you use either your account on the <code>klaatu.cs.washington.edu</code> machine or your own copy of the CSE Linux Virtual Machine.  It is
+  ok if you use another reasonably recent Linux system, but we will use the CSE systems to evaluate submitted work, and it is probably easiest to work there.  
+You will need a 64-bit Linux system for some later assignments, but for now a 32-bit system will also work. See the <em><a href="../linux/index.html">Linux Resources</a></em> page on the course web site for more information about how to get started.
+<ol start="0">
+  <li>(Shell) You <em><strong>must</strong></em> be
+    sure that your default shell is <code>bash</code>.
+    Otherwise you will run into strange, baffling problems with shell scripts.
+    Enter the command <code>echo $SHELL</code>. The response should be <code>/bin/bash</code>.
+    If the shell name is different (<code>csh</code>, <code>tcsh</code>, or something
+    else), use the appropriate commands on your system to change your login shell
+    to <code>bash</code>. On many unix systems this can be done with the command
+    <code>chsh</code> or <code>ypchsh</code>. If you are using the EE Linux 
+    machines, there is a separate web page to set your login shell - it's the
+    same one you use to change your
+    password.<br>
+  <br>
+  </li>
+  <li>(Commands) Open a shell window and enter the following commands. They should
+    work without errors if typed exactly as shown.
+	The <code>script</code> command will capture the terminal session and
+	save	it in	a file named <code>hw0.script</code> on the desktop.<br>
+<pre>   cd
+   cd Desktop
+   script hw0.script
+   whoami
+   echo $SHELL
+   pwd
+   uname -a
+   exit</pre>
+  </li>	
+  <li>(Chatting) Go the course discussion board (link on the web site) and post a followup to the Welcome message to introduce yourself, and to get gopost to automatically track new postings for you.</li>
+  <li>(Poll) Optionally, answer these two poll questions. Results are viewed only by the instructor.
+  <ol>
+    <li><a href=https://catalyst.uw.edu/quickpoll/vote/bdmyers/9521>Linux Experience</a></li>
+    <li><a href=https://catalyst.uw.edu/quickpoll/vote/bdmyers/9522>C experience</a></li>
+  </ol>
+  </li>
+</ol>
+<strong>Assessment:</strong> Your solution will be evaluated on how
+  well it follows the instructions
+and produces the desired results.<br>
+<br>
+<strong>Turn-in Instructions:</strong> Use the turn-in drop box link on the
+main
+course web page
+to turn the <code>hw0.script</code> file created in  problem 1. The drop box will allow you to
+turn in your homework up to 
+two days late, if you choose to use one or two of your late days, but you are <em><strong><u>strongly</u></strong></em> advised to save your 
+  for later in the quarter when they may be much more useful.) 
+<!--end HTML content-->
+   </div><!-- section -->
+  </div><!-- content -->
+<div id="legalese-footer">
+   <div class="region region-legalese-footer">
+    <div id="block-block-1" class="block block-block first last odd">
+     <div class="content">
+<p class="legalese">Computer Science &amp; Engineering University of Washington Box 352350 Seattle, WA 98195-2350 (206) 543-1695 voice, (206) 543-2969 FAX</p>
+<p class="legalese">Comments to <a href="/htbin-post/unrestricted/mailto2.pl?to=adminanchor&sub=UW+CSE+Web:+CSE+374+-+Homework+0+-+Winter+2015">adminanchor</p>
+<p class="legalese"><a href="//www.washington.edu/online/privacy" target="_blank">UW Privacy Policy</a> and <a href="//www.washington.edu/online/terms" target="_blank">UW Site Use Agreement</a></p>
+     </div><!-- content -->
+    </div><!-- /.block -->
+   </div><!-- /.region -->
+  </div><!-- legalese-footer -->
+ </div><!-- /#page -->
+</div><!-- /#page-wrapper -->
+</body>
+</html>

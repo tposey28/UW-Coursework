@@ -1,0 +1,429 @@
+<html>
+<head>
+<title>CSE 373 Assignment A1</title>
+<link rel="stylesheet" href="../../steves-basic.css" type="text/css">
+</head>
+
+<body class="top">
+
+<div class="header">
+
+  <table>
+   <tr height="25"><td>&nbsp;CSE 373, Autumn, 2014 -- University of Washington</td></tr>
+  </table>
+</div>
+
+<div class="wrapper">
+
+<h1>Assignment A1: Image Enhancement with Undo and Redo</h1>
+
+<h2>Overview</h2>
+<p>In this assignment you'll add an Undo feature to a Java application for image enhancement.
+This feature should make use a of stack.  Parts of the challenge will be the implementation of the stack operations,
+and deciding what kind of data needs to be put into the stack.
+
+<p>
+
+Start with the "Image Enhancer" program.  You may use either the
+<a href="ImageEnhancer.java">original version (ImageEnhancer.java)</a> or the 
+<a href="ImageEnhancerV2.java">new version (ImageEnhancerV2.java)</a>. (If you are not very far into the assignment, use the new version.
+It not only helps the graders but offers you some extra scaffolding for implementing the changes, such as adding the Undo and Redo menu items.)
+
+
+Create a Java project in Eclipse with the same name.  Put a copy of this
+<a href="Aeroplane-view-of-UW.png">UW campus image</a>
+ into the main project folder.  Make sure you can compile and run this program.  You operate it by right-clicking on the
+image and selecting image transformations to apply.    There is no way to undo an operation in this program (other than
+restarting the program, which is not very cool).
+
+<p>Here's a screen shot of the ImageEnhancer program that you'll start with.
+<br>
+<center>
+<img src="ImageEnhancer.png">
+</center>
+
+<h2>Basic Specifications</h2>
+<p>
+Create another project, ImageEnhancerWithUndoAndRedo.  Put a copy of the starter code in this project, but rename the
+file and public class to be ImageEnhancerWithUndoAndRedo. (However, if you are using the new starter code, use the name ImageEnhancerWithUndoAndRedoV2.)
+  Also put another copy of the UW campus image in this folder, so
+the new version will work, too.
+<p>
+Change the title on the new application's window to be "Image Enhancer WITH Undo AND Redo by " followed by your full name.  For example, it
+might be something like "Image Enhancer WITH Undo AND Redo by Mary-Lou Jones".
+<p>
+
+Add two new menu items to the end of the popup menu.  One should be
+"Undo" and the last one should be "Redo".
+
+Modify the actionPerformed method so that it doesn't break when either
+of these options is selected by the user.
+
+<p>
+
+Create a new class, in a separate file named ImageStack.java.  This
+class must implement a stack of objects (whose type is something for
+you to figure out), and you must not import the built-in Stack class,
+but rather you will utilize the ArrayList class to hold the elements
+of your image stack.  Comment each method in this file.  You are
+encouraged, but not required, to use standard JavaDoc conventions for
+this.  Also provide a comment at the top of this file that gives the
+name of the file, your name, and an explanation for the purpose of
+this file as part of the whole application.
+The methods to provide are the following: 
+<ul>
+<li>push(dataItem): enters the data item onto the stack and returns nothing.
+<li>pop(): throws an exception if the stack is empty; otherwise returns the
+top element, removing it from the stack.
+<li>peek(): throws an exception if the stack is empty;
+otherwise returns the top element of the stack.
+However, unlike pop, it does not change the contents of the stack.
+<li>isEmpty(): returns true if there are no items in the stack; false otherwise.
+<li>clear(): makes the stack empty.
+<li>popWasLast(): returns true if the last push, pop, or clear operation
+was a pop and false otherwise.  If neither a push nor a pop nor a clear has yet been executed, then
+false is returned.
+<li>getSize(): returns the number elements currently in the stack.
+</ul>
+
+<p>
+
+Make use of your new ImageStack class to implement the Undo feature in
+your application.  If the user has not yet applied any operations to
+the image, or has undone all the operations performed, then
+the Undo menu item be grayed out and disabled.
+
+<p>
+
+The user should be able to undo all the operations that have been applied so far, so as to go all the
+way back to the original image.  Thus your applications will have multiple levels of Undo.
+
+<p>
+
+Once your Undo feature is working, figure out how to provide
+functionality for the Redo feature.
+
+The Redo action should only be enabled and do something if an Undo operation has just
+been performed.
+
+There should also be multiple levels of Redo.  However, if the user
+performs an Undo action and then applies some other operation to the
+image, there is a question of whether any remaining Redo options
+should persist or whether they should be deleted.  For this
+assignment's basic functionality, assume they should be deleted.  (Extra credit options A1E1
+and A1E3 involve implementing more flexible ways of handling Redo.)
+
+<p>
+
+Whenever an Undo command or a Redo command is successfully performed,
+your application should print out a message (using System.out.println) that explains clearly how
+many elements are currently in the Undo stack and how many are
+currently in the Redo stack.
+
+<P>
+
+Add a comment line after the first line of
+ImageEnhancerWithUndoAndRedo.java that gives your name and a little
+context.
+
+That should also include a list of what features you got working.
+
+For example:
+<br>
+<pre class="mycode">
+/* ImageEnhancerWithUndoAndRedo.java
+ * by Allan Glenn for CSE 373 Assignment 1, Autumn 2014.
+ * This program is an enhanced version of one provided by Oracle.com and
+ * subsequently modified by S. Tanimoto, instructor for the course.
+</pre>
+
+<h2>Extra credit options</h2>
+
+<p>
+
+Each of the following options can earn you some extra credit. 
+However, do not attempt the extra credit features until you have the basic features
+working correctly.
+ If you have implemented
+any of the extra credit features, 
+add another comment line near the top of your ImageEnhancerWithUndoAndRedo.java
+file explaining
+which ones you finished.  For example: "* I completed Options A1E1 and A1E5."
+<p>
+
+(Option A1E1) Add a label and a button after the Format choice box. The label should
+say "Redo Mode:" and the button should say either "Options are
+cleared" or "Options persist", depending on the value of a new boolean
+variable RedoOptionsPersist, which should have false as its default
+value.  When the user presses the button with the mouse, the value
+should toggle, and the button's text should be updated.
+
+Then, whenever a user undoes something and then applies some operator
+to the image, the options for Redo will either be deleted (normal
+behavior) or not deleted ("persistent options").  However, even in the
+persistent mode, if the user does select Redo and something is redone,
+that item should be deleted from the list of remaining Redo items.
+
+<p> 
+
+
+(Option A1E2) Add a menu bar to the window and a File menu with an option to Load a
+new image.  That should bring up a file dialog box that shows only the
+following types of images: .gif, .jpg, .png, and .bmp.  The app should
+then load in the selected image.  This operation should be undoable
+and redoable, but redoing it means the already selected image will
+again be the current image; it will not mean that the dialog
+reappears.
+
+<p> 
+
+(Option A1E3) Add a popup menu item to the end of the popup menu (after the Redo
+item) called "Drop this Redo item".  When the user selects this,
+assuming there is at least one available Redo item, the operation that
+WOULD be redone if selected normally is NOT performed, but the item is
+removed and no longer available for Redo.  (However, if there were
+multiple instances of that operation, one after another, only one is
+dropped.
+
+If the user wants another to be dropped, then the "Drop this Redo
+item" should be selected again.
+
+<p> 
+
+(Option A1E4) Assuming that the menu bar and File menu have been added, reorganize
+the image saving code so that there is a "Save As..." option in the
+File menu, and a file dialog box comes up that offers the same set of
+extensions (.jpg, etc.) as offered in the original ImageEnhancer, as
+well as the opportunity to name the file.  The JComboBox will then no
+longer be needed, and it should be removed from the interface, and the
+actionPerformed method should also be updated to not use any
+JComboBox.
+
+<p>
+
+
+(Option A1E5) Implement an additional file ImageQueue.java similar to your
+ImageStack.java, and use it to implement a Replay feature, that should
+be accessed from a separate menu next to the File menu.  This menu
+should contain three items: "Replay", "Enqueuing On/Off", and "Clear
+Replay Queue".  If you implement this feature, then any time the user
+applies an operator to the image, loads an image, performs an Undo or
+a Redo, a copy of the current image should be entered into the queue,
+unless Enqueuing has been turned off.  If the user selects "Replay",
+then a little movie should run, using a timed thread that goes through
+the queue once, dequeing and showing each image for approximately 1
+second.  It should immediately re-enqueue each image (so that the user
+has the option to replay the same sequence again) but know when to
+stop.  If enqueuing is disabled, then user operations are no longer
+added to the queue. The queue is not emptied just because enqueuing is
+disabled, though.  The user may select the menu item again and then
+enqueuing will be back in force.  If the "Clear Replay Queue" item is
+selected, then the queue is made empty.  Whenever one of these menu
+items is selected, a message should be printed to the console telling
+something about the old and new state of the queue.  For example,
+"Replaying a 12-step sequence."  Or "Enqueuing now enabled. Queue
+contains 13 items."  Or "Queue with 7 items being emptied. Enqueuing
+is enabled."
+
+
+<h2>Turn-in</h2>
+
+<p>
+
+Turn in your source files through our Catalyst CollectIt
+<a href="https://catalyst.uw.edu/collectit/dropbox/tanimoto/32811">dropbox</a>.
+This assignment is due Wednesday, October 8 at 5:00 PM.  Late penalties apply (see
+the
+<a href="../../policies.html">policies</a> page for details).
+
+
+<h2>Grading Rubric</h2>
+
+<p>
+In this assignment, you can earn 100 regular points and up to 20 points of
+extra credit.
+
+<p>
+The regular credit will be awarded as follows.
+<ul>
+<li>
+ Window title change correctly handled: 5
+<li>
+ Menu items "Undo", "Redo" added and don't break if selected: 5
+<li>
+
+ ImageStack file and class exist and all specified methods work correctly: 40.
+   (push, pop, peek, clear, isEmpty, popWasLast, getSize ).
+     If any of these are missing or incorrect, subtract 5 for each one missing,
+      but net points for this cannot go negative.
+
+   (Use of generics with ArrayList is not required, but it is OK to use generics.)
+<li>
+
+
+40 points for correct implementation of functionality.
+<pre class="mypre">
+ Undo works properly from an undoable state.
+ Redo works properly from a readoable state.
+ (15 points deducted from the 40 for each of these two
+  features unimplemented or not working properly.)
+
+ Undo item grayed out and disabled when stack is empty.
+ Undo item not grayed out and enabled when stack is not empty.
+ Redo item grayed out and disabled when no operation is available to redo. (updated 30-09-14)
+ Redo item not grayed out and enabled when some operation IS available to redo. (updated 30-09-14)
+ (5 points deducted from the 40 for each of these four
+  features unimplemented or not working properly,
+  subject to cutoff at 0.)
+</pre>
+<li>
+10 points for writing very clear readable code with clear comments in
+English for each new class, method and function, and static variable.
+Any other variables should have names suggestive of their meaning,
+with comments unless the variable is a loop variable (i.e., int i) or
+a size or length (int n).  JavaDoc format is fine but not required.
+The comments at the top of each file, described earlier, also contribute
+to these points.
+</ul>
+<p>
+Note: Some points (max 20) will be deducted if the program is particularly slow
+or it flashes multiple images on the screen when an Undo or Redo is
+performed.  
+
+
+
+<p>
+Extra credit: There are four options worth 3 points each, and one option ("Replay using
+ImageQueue.java") worth 8 points.  In order to get the extra credit for a feature, the
+feature must be completely working, as specified on this Assignment webpage.  (Partial
+credit for an extra-credit feature will not be given.)
+
+<h2>An Explanation of the Image Processing Features</h2>
+
+<p>
+The stack data structure is generally considered to be an easy data structure to implement,
+especially in comparison to B-trees, AVL trees, etc.  In order to make this assignment interesting,
+the implementation of the stack gets integrated with an application.  The use of the stack turns
+out to be essential for a reasonable implementation of the Undo feature -- something we typically
+take for granted in usable interactive software involving editing of any kind.
+
+<p>
+The application here is an image enhancement program. It's pretty basic as such programs go,
+but it serves the purpose of providing a context in which to implement Undo.  The code comes
+from Oracle.com, but it has been modified by your instructor to both simplify the code,
+make it more efficient, and provide a richer set of enhancement possibilities.  
+Five image-processing operations are provided: (0) Darken by 10%, (1) Convolve: Low-Pass,
+(2) Convolve: High-Pass, (3) Photonegative, and (4) RGB thresholds at 128.  When the program is
+running, these operations become available when the user right-clicks with the mouse.
+After an operation is performed on the image, the current image is replaced by the resulting
+image, and subsequent operations can be applied to this result.  Thus long chains of these
+operations can be executed, if wanted by the user.
+
+<p>Knowing how the image-processing operations are implemented is not necessary for this assignment.
+However, here is some information about it for those interested.
+Three of the operations involve the use of a "lookup table" (LUT).  A lookup table here is an array of 256 bytes that represent a mapping from [0, 1, ..., 255] to [0, 1, ..., 255].
+The photonegative operation uses the mapping {0 -> 255, 1 -> 254, ..., 255 -> 0 }.
+The darken by 10% operation has its own mapping, as does the thresholding operation.
+Java's image module provides functionality for applying this kind of mapping to the R, G, and B
+color components of each pixel of a BufferedImage object.
+Two of the operations involve the use of Convolution filtering.  This kind of operation computes each
+output pixel value as a weighted sum of the pixels in a (3 by 3) neighborhood.  The low-pass filter
+is computing a weighted average, which leads to intentional blurring of the image.
+The high-pass filter is applying what's known as a Laplacian operator to the image and adding that
+result to the image thus "sharpening" it a little bit, which means making the "edges" that separate
+differently colored regions show up more prominently.  These filtering operations are implemented
+in the program by instantiating java.awt.image.ConvolveOp.  
+
+<p>
+For this assignment, the only type of image processing object that you really need to pay attention to
+is the BufferedImage class.
+When you look at the source code ImageEnhancer.java, you can see calls to its constructor.
+For example, there's this code on line 109 (and here with lines 110 and 111):
+<pre class="mycode">
+biWorking = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+gWorking = biWorking.getGraphics();
+gWorking.drawImage(biOriginal, 0, 0, null);
+</pre>
+<p>
+This creates a new buffered image object for an image with width w and height h.  That means w columns and h rows.  The type of image is RGB meaning that each pixel will have three numbers associated with
+it: one for red, one for green, and one for blue.
+The buffered image is assigned to a variable biWorking, which is the working buffered image ... the one that the user sees on the screen most of the time.
+<p>
+The two lines of code that follow that constructor call above do something important: they put
+image data into the buffered image.  This is done in two steps. First, a "graphics" object is
+obtained by calling the getGraphics() method of the BufferedImage object biWorking.
+The graphics object supports "painting" into the pixels of the buffered image, and one of the
+painting methods is drawImage.  By invoking the drawImage method of the graphics object gWorking,
+the pixel values from another image, here biOriginal, get written into the pixels of biWorking.
+By the way, the contents of biOriginal were obtained by doing a similar kind of painting from a
+temporary image that was read from a file.  The original is kept around but not really used any
+more in this starting-code version of the program.
+<p>
+You will need to arrange for BufferedImage objects to be created and saved on your image stack.
+You have a choice to make.  Either use BufferedImage objects directly as your stack data items,
+or make a new class whose instances will consist of a pair of elements: the buffered image and
+a string that describes the operation that produced it.  If you include the latter, you can
+make your user interface a little bit friendlier, letting the user know via the peek() operation
+what the operation is that will be undone if Undo is selected.  And similarly for Redo, you will
+be able to name the operation that will be performed if Redo is selected.
+Either way, you will need to arrange for BufferedImage objects to be created (typically as copies
+of biWorking) and given pixel data (using the same approach described above).
+
+<h2>Comments on the use of AWT and Swing</h2>
+
+<p>
+The ImageEnhancer application uses a graphical user interface ("GUI").  It is implemented
+using a combination of Java AWT (Abstract Windowing Toolkit) and Java Swing (another library of
+components provided by the Java Runtime Environment).  
+
+<p>
+The important thing to understand for this assignment is that user actions are handled
+primarily by one method, called actionPerformed.   In order to add more functionality
+to the program, you should first add any needed components such as menus and menu items,
+and then add more cases to the body of the actionPerformed method.  The method is
+called when the user clicks the mouse, etc., and information about the user-generated
+event is passed in as the ActionEvent object, bound to the variable e.
+The body of that method consists of some tests to find out what the user acted on
+(e.g., making a selection using the JComboBox widget), and then some code that
+performs the requested action.
+
+
+<h2>Advice from CJ Liu, Lead TA for Assignment 1</h2>
+
+<p>
+Remember that a stack uses the LIFO access pattern: Last-In, First-Out.   (Some say FILO -- First-In, Last Out).
+Understand what a buffered image is and how to create one and copy pixel data into it.
+
+<p>
+Suggestion: Think carefully first and then code. Drawing a graph or diagram on paper will help a lot
+when thinking about Undo and Redo.
+
+<p>
+Null pointer exceptions are common during development.  One way to address them is to add code using the following pattern:
+<pre class="mycode">
+if (something == null) {
+  something = new something();
+}
+return something;
+</pre>
+<p>
+and check for null when checking the size or something like that.
+
+<p>
+For additional discussion of this and other assignments, check our GoPost discussion board.
+
+<p>
+&nbsp;
+<br>
+Version 1.02. Last major update Tuesday, September 24, 2014 at 13:00.
+Minor update Sept. 25 at 19:43.  Grading rubric updated Sept. 30 at 9:51 AM (Redo menu item
+should be enabled if and only if an undone operation is available to redo.)
+New version of the starter code added as an option on October 1 at 10:25 PM.
+</div>
+
+
+
+</body>
+
+
+</html>

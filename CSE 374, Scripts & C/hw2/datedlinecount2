@@ -1,0 +1,28 @@
+#!/bin/bash
+# Taylor Posey
+# CSE 374, Brandon Myers
+# Homework 2, Problem 4
+# 1/19/2014
+
+# Print an error message if there are less than two given arguments
+if [ $# -lt 2 ]
+then
+        echo "${0}: needs at least two arguments" >&2
+exit 1
+fi
+
+# Set the first argument as the output file and shift arguments
+output="$1"
+shift 1
+
+# Print date and line count of remaining arguments to output file
+date >output
+count=0
+while (( "$#" ))
+do
+	((count=$count+"$( wc -l "$1" | grep -Eo '[1-9]' )"))
+	wc -l "$1" >>output
+shift 1
+done
+
+echo "$count total" >>output

@@ -1,0 +1,812 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CSE 374 - Programming Concepts and Tools - Winter 2015 - Homework 6</title>
+
+  <link rel="stylesheet" href="/home/cse2012.css" type="text/css">
+  <!--[if IE]>
+<style type="text/css" media="all">@import url("/home/cse2012ie.css");</style>
+<![endif]-->
+  <!--[if lte IE 7]>
+<style type="text/css" media="all">@import url("/home/cse2012ie7.css");</style>
+<![endif]-->
+  <!--[if lte IE 6]>
+<style type="text/css" media="all">@import url("/home/cse2012ie6.css");</style>
+<![endif]-->
+</head>
+<body class="html not-front not-logged-in one-sidebar sidebar-first page-node node-type-page" >
+<div id="page-wrapper">
+ <div id="page">
+  <div id="header">
+   <div class="section clearfix">
+    <div class="region region-purple-banner">
+     <div id="block-block-71" class="block block-block first odd">
+      <div class="content"><a href="//www.washington.edu/"><img src="/images/purple_w.png" alt="university of washington logo" /></a></div>
+     </div><!-- /.block -->
+     <div id="block-menu-menu-top-purple-banner" class="block block-menu first last odd">
+      <div class="content">
+<ul class="menu">
+ <li class="first leaf"><a href="//www.cs.washington.edu/about_us" title="">ABOUT US</a></li>
+ <li class="leaf"><a href="//www.cs.washington.edu/contact" title="">CONTACT US</a></li>
+ <li class="leaf"><a href="https://norfolk.cs.washington.edu/mycse" title="">MY CSE</a></li>
+ <li class="last leaf"><a href="https://www.cs.washington.edu/internal" title="">INTERNAL</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+    <div class="region region-header">
+     <div id="block-block-64" class="block block-block first odd">
+      <div class="content">
+<a href="/" title="Home" rel="home" id="logo"><img src="/images/cse_banner_0.png" alt="Home" /></a>
+      </div>
+     </div><!-- /.block -->
+     <div id="block-nice-menus-1" class="block block-nice-menus last odd">
+      <div class="content">
+<ul class="nice-menu nice-menu-down" id="nice-menu-1">
+<li id="nice-menu-id-news_events" class="menu-news_events menuparent first"><a href="//www.cs.washington.edu/news_events">News &amp;<br>Events</a></li>
+<li id="nice-menu-id-people" class="menu-people menuparent"><a href="//www.cs.washington.edu/people">People</a></li>
+<li id="nice-menu-id-education" class="menu-education menuparent active-trail"><a  class="active-trail active"href="//www.cs.washington.edu/education">Education</a></li>
+<li id="nice-menu-id-research" class="menu-research menuparent"><a href="//www.cs.washington.edu/research">Research</a></li>
+<li id="nice-menu-id-students" class="menu-students menuparent"><a href="//www.cs.washington.edu/students">Current<br>Students</a></li>
+<li id="nice-menu-id-prospective_students" class="menu-prospective_students menuparent"><a href="//www.cs.washington.edu/prospective_students">Prospective<br>Students</a></li>
+<li id="nice-menu-id-faculty_candidates" class="menu-faculty_candidates menuparent"><a href="//www.cs.washington.edu/faculty_candidates">Faculty<br>Candidates</a></li>
+<li id="nice-menu-id-alumni" class="menu-alumni menuparent"><a href="//www.cs.washington.edu/alumni">Alumni</a></li>
+<li id="nice-menu-id-industrial_affiliates" class="menu-industrial_affiliates menuparent"><a href="//www.cs.washington.edu/industrial_affiliates">Industry<br>Affiliates</a></li>
+<li id="nice-menu-id-supportcse" class="menu-supportcse menuparent"><a href="//www.cs.washington.edu/supportcse">Support<br>CSE</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+   </div><!-- section -->
+  </div><!-- /.section, /#header -->
+<div id="main-wrapper">
+ <div id="main" class="clearfix with-navigation">
+  <div id="content" class="column">
+   <div class="section">
+<h1 class="title" id="page-title">CSE 374 - Programming Concepts and Tools - Winter 2015 - Homework 6</h1>
+
+<!--begin HTML content-->
+
+<h2>Due Dates</h2>
+This assignment is due in 3 (three) parts:
+<ul>
+	<li><a href="#part1">Part 0</a>, due Saturday, February 21, 2015 at 11:00 PM  </li>
+	<ul><li>(1%) Form a team of 2 and submit a plain text file containing  the uwnetid of both partners, one per line to catalyt drop box. </li>
+		<li>Follow the instructions in <a href="#part1">Part 0 of the Turn-In Instructions</a> exactly.</li>  
+		<li><strong>Persons who do not have a team by the due date will be randomly assigned in pairs.</strong></li></ul>
+	<li><a href="#part2">Part 1</a>, due Thursday, February 26, 2015 at 11:00 PM </li>
+	<ul><li>(14%) Use Git repository for development.  Turn in header files, function prototypes/skeletons, and Git log.</li>
+		<li><strong>No late days accepted for this part of the assignment!</strong></ul>
+	<li><a href="#part3">Part 2</a>, due Thursday, March 5, 2015 at 11:00 PM </li>
+	<ul><li>(85%) Use Git repository for development.  Turn in final code files and Git log.</li>
+		<li><strong>If you wish to use a
+		  late day or two for the final part of the project, both  members must
+		  have those late days available</strong>.</li></ul>
+</ul>
+
+<h2>Objectives</h2>
+<p>This assignment continues our exploration of procedural programming, memory
+  management, and software tools, as well as software development and working
+  in teams. In particular,
+in this assignment you will:
+
+<ul>
+<li>Implement and test a  memory management package that has the same functionality
+  as the standard C library <code>malloc</code> and <code>free</code> functions,
+<li>Gain experience using source-code management systems (version control), in particular 
+	<a href="http://progit.org/">Git </a>,
+<li>Gain further experience with software development tools like <code>make</code>, and 
+<li>Gain experience  working in teams.
+</ul>
+
+<h2>Assignment</h2>
+<p>This portion of the page is divided into subsections for your convenience:</p>
+<ul>
+	<li><a href="#synopsis">Synopsis</a></li>
+	<li><a href="#techreqts">Technical Requirements (the "What")</a></li>
+	<ul>
+		<li><a href="#mem_mgt_what">Memory Management Package</li>
+		<li><a href="#bench_and_test">Benchmark and Testing Program</li>
+	</ul>	
+	<li><a href="#addtlreqts">Additional Requirements</a></li>
+	<li><a href="#teamwork">Working with a Team</a></li>
+	<ul>
+		<li><a href="#divide_work">Dividing the Work</a></li>
+		<li><a href="#reponotes">Git Repository</a></li>
+	</ul>
+	<li><a href="#implhints">Implementation Hints (the "How")</a></li>
+	<ul>
+		<li><a href="#developtest">Development and Testing</a></li>
+		<li><a href="#pointers">64-bit Pointers and <code>int</code>s</a></li>
+		<li><a href="#mem_mgt_impl">Memory Management Package</a></li>
+		<li><a href="#benchmark_impl">Benchmark and Testing Program</a></li>
+	</ul>
+	<li><a href="#extracredit">Extra Credit</a></li>
+
+</ul>
+
+<h3 id="synopsis">Synopsis</h3>
+<p>In this assignment you (together with your teammate(s)) will develop and benchmark a
+  memory management package.  Your team will turn in a single assignment, and <strong>all 
+	members will receive the same grade on the project.</strong>
+	
+	<p>Please <strong><font color="#CC0066"> start now</font></strong>. Even
+	  though you are working with a team, there is enough to do that you will
+	  be in
+	  <font size="-2">(big)</font> trouble if you wait until 
+	   the weekend before it is due to begin. To encourage you to get started now you are
+	  required to turn in skeleton files for your code (<a href="#part2">Part 1</a>) fairly early in the project.</p>
+
+
+<h3 id="techreqts">Technical Requirements (the "What")</h3>
+<p>The project consists of two main technical pieces: a <a href="#mem_mgt_what">memory management package</a>,
+  and a <a href="#bench_and_test">benchmark and testing program</a> to exercise it and report statistics. The members of your team
+  will be in charge of different parts of the assignment (<a href="#divide_work">suggestions for dividing the work are 
+	given below</a>).
+  <strong>Ultimately, however, all of you are responsible for, and should understand
+  and be able to explain, all of the
+  code (<font color="#CC0066">hint, concepts may show up on the final</font>).</strong></p>
+
+<h4 id="mem_mgt_what">Memory Management Package</h4>
+<p>The memory management package should include a header file <code>mem.h</code> and
+   C implementation  files that specify and implement the following
+  four functions:</p>
+<ol>
+  <li><code>void* getmem(uintptr_t size)</code> 
+	<br>Return a pointer to a new block of
+    storage with at least <code>size</code> bytes of memory. The pointer to the
+    returned block should be aligned on a 16-byte boundary (i.e., its address
+    should be a multiple of
+    16). The block may be somewhat larger than the size requested, if that is
+    convenient for the memory allocation routines, but should not be significantly
+    larger, which would waste
+    space. The value <code>size</code> must be greater than
+    0. If <code>size</code> is
+    not positive, or if for some reason <code>getmem</code> cannot satisfy the
+    request, it should return <code>NULL</code>. Type <code>uintptr_t</code> is an unsigned 
+integer type that can hold a pointer value (i.e., can be converted to or from a pointer of type 
+<code>void *</code>, or other pointer type, exactly). It is defined in header <code>&lt;inttypes.h&gt;</code> 
+(and also <code>&lt;stdint.h&gt;</code>). See <a href="#pointers">discussion about pointers and <code>int</code>s</a> below.</li>
+<br>
+  <li><code>void freemem(void* p)</code>
+	<br>Return the block of storage 
+    at location <code>p</code> to the pool of available free storage. The pointer
+    value <code>p</code> must be one that was obtained as the result of a call
+    to <code>getmem</code>.
+    If <code>p</code> is <code>NULL</code>, then the call to <code>freemem</code>
+    has no effect and returns immediately. If <code>p</code> has
+    some  value other than one returned by <code>getmem</code>, or if the block
+    it points to has previously been released by
+    another call
+    to <code>freemem</code>,
+    then the operation of <code>freemem</code> is undefined (i.e., <code>freemem</code> may
+    behave in any manner it chooses, possibly causing the program to crash either
+    immediately or later;
+    it is under no obligation to detect or report such errors).<br><br>
+    One additional implementation requirement: When <code>freemem</code> returns a block of
+    storage to the pool, if the block is physically located in memory adjacent
+    to one or more other
+    free blocks, then the free blocks involved should be combined into a single
+  larger block, rather than adding the small blocks to the free list individually.</li>
+<br>
+  <li><code>void get_mem_stats(uintptr_t* total_size, uintptr_t* total_free, uintptr_t* n_free_blocks)</code>
+	<br>Store statistics about the current state of the memory manager in the three
+    integer variables whose addresses are given as arguments.
+The	information stored should be as follows:
+    <ul>
+	<li><code>total_size</code>: total amount of storage in bytes acquired
+	  by the memory manager so far to use in satisfying allocation requests.
+	  (In other words, the
+	  total amount requested from the underlying system.)</li>
+	<li><code>total_free</code>: the total amount of storage in bytes that is currently
+	  stored on the free list, including any space occupied by header information
+	  or
+	  links in the free  blocks.</li>
+    <li><code>n_free_blocks</code>: the total number of individual blocks currently stored
+      on the free list.</li>
+    </ul>
+  See the discussion below outlining the <a href="#mem_mgt_impl">implementation of the memory manager</a>
+  for more details about these quantities.</li>
+<br>
+  <li><code>void print_heap(FILE * f)</code>
+	<br>Print a formatted listing on file
+    <code>f</code> showing the blocks on the free list. Each line of output should
+    describe one free block and begin with two  hexadecimal numbers (<code>0xdddddddd</code>,
+    where <code>d</code> is
+    a hexadecimal digit) giving the address and length of that block.
+    You may include any additional information you wish on the line describing the free block,
+    but each free block should be described on a single output line that begins
+    with the block's address and length.</li>
+</ol>
+
+
+<h4 id="bench_and_test">Benchmark and Testing Program</h4>
+<p>You should implement a program named <code>bench</code>, whose source code
+  is stored in a file <code>bench.c</code>. When this program is run, it should
+  execute a large number of calls to functions <code>getmem</code> and <code>freemem</code>  to
+  allocate and free blocks of random sizes and in random order. This program
+  should allow the user to specify parameters that control the test. The 
+  command-line parameters, and their default values are given below. Trailing
+  parameters can
+  be omitted, in which case default values should be used. Square brackets <code>[]</code> mean
+  optional, as is the usual convention for Unix command descriptions.</p>
+
+<h5>Usage</h5>
+<code>bench [ntrials [pctget [pctlarge [small_limit
+    [large_limit [random_seed ]]]]]]</code></p>
+
+<h5>Parameters</h5>
+<ul>
+  <li><code>ntrials</code>: total number of <code>getmem</code> plus <code>freemem</code> calls
+    to randomly perform during this test. Default 10000.</li>
+  <li><code>pctget</code>: percent of the total <code>getmem</code>/<code>freemem</code> calls that should be <code>getmem</code>.
+    Default 50.</li>
+  <li><code>pctlarge</code>: percent of the <code>getmem</code> calls that should
+    request &quot;large&quot; blocks with a size greater than <code>small_limit</code>.
+    Default 10.</li>
+  <li><code>small_limit</code>: largest size in bytes of a &quot;small&quot; block.
+  Default 200.</li>
+  <li><code>large_limit</code>: largest size in bytes of a &quot;large&quot; block. Default 20000.</li>
+  <li><code>random_seed</code>: initial seed value for the random number generator.
+    Default: some more-or-less random number such as the 
+    the system time-of-day clock (or  bytes read from <code>/dev/urandom</code> if
+    you're feeling adventurous).</li>
+</ul>
+<p>(<strong>Hint:</strong> The parameter list is, admittedly, complex, but the intent is that this program
+  will be executed by various commands in your <code>Makefile</code>(s), so you
+  will not have
+to repeatedly type long command lines to run it.)</p>
+
+<h5>Behavior</h5>
+<p>When <code>bench</code> is executed, it should perform <code>ntrials</code> memory
+  operations. On each operation, it should randomly decide either to allocate
+  a block using
+  <code>getmem</code> or free a previously acquired block using <code>freemem</code>.
+  It should make this choice by picking a random
+  number with a <code>pctget</code> chance of picking <code>getmem</code> instead
+  of <code>freemem</code>.
+  If the choice is to free a block and all
+  previously allocated blocks have already been freed, then there is nothing
+  to do, but this choice should be counted against the <code>ntrials</code> total
+  and execution should continue. </p>
+<p>If the choice is to free a
+    block, one of the previously allocated blocks should be picked randomly to
+    be freed. The bench program must pick this block and update any associated
+  data structures used to keep track of allocated blocks in amortized constant
+  (<em>O</em>(1)) time so that the implementation of the bench program does not
+  have unpredictable effects
+  on the processor time needed for the test.</p>
+<p>The next three parameters are used to control the size of the blocks
+  that are allocated. In typical use, memory managers receive many more requests for
+  small blocks of storage than large ones, and the order of requests is often unpredictable. To model this
+  behavior,  each time a new block is allocated, it should be a large block with
+  probability <code>pctlarge</code>; otherwise it should be a small block (use
+  a random number generator to make this decision with the requested
+  probability). If the decision is to allocate a small block, request a block
+  whose size is a
+  random
+  number between
+  1 and <code>small_limit</code>.
+  If the decision is to allocate a large block, request a block whose size is
+  is a random number between <code>small_limit</code> and <code>large_limit</code>.</p>
+<p>While the test is running, the benchmark program should print the following
+  statistics to <code>stdout</code>:</p>
+<ul>
+  <li>Total CPU time used by the benchmark test so far in seconds (show enough
+    fractional digits to provide useful information if possible, although the
+    granularity of the system clock may be too large for this to be meaningful
+    for short tests).</li>
+  <li>Total amount of storage acquired from the underlying system by the memory
+    manager during the test so far (e.g., the <code>total_size</code> quantity
+    from <code>get_mem_stats</code>,
+    above).</li>
+  <li>Total number of blocks on the free storage list at this point in the test.</li>
+  <li>Average number of bytes in the free storage blocks at this point in the
+  test.</li>
+</ul>
+<p>The program should print this 10 times during execution, evenly spaced during
+  the test. In other words, the first report should appear after 10% of the total
+  <code>getmem</code>/<code>freemem</code> calls have executed, then after 20%,
+  30%, etc., and finally after the entire test has run. You may format this information
+  however you wish, but please keep it brief and understandable - one line for
+  each set of output numbers should be enough.</p>
+
+
+<h3 id="addtlreqts">Additional Requirements</h3>
+<p>Besides the <a href="#techreqts">Technical Requirements</a> above, you should meet the following additional requirements
+  for this assignment:</p>
+<ul>
+  <li>You and your teammate(s) must use your team's <a href="#reponotes">class-provided Git
+	 repository</a> to store all of
+    the code and other files associated with the project (such as the <code>Makefile</code>). (But
+    don't
+    store
+    things
+    like <code>.o</code> files
+    and executable programs that don't belong in a repository.) <strong>You must use
+    the repository that we provide even if you have separate machines or accounts of your
+    own that you use for other projects.</strong></li>
+  <li>You should create a <code>Makefile</code> with at least the following targets:
+  <ul>
+  <li><code>bench</code> (this should be the default target). Generate the <code>bench</code>    executable
+    program.</li>
+  <li><code>test</code>. Run the <code>bench</code> test program with default parameters.
+    This should recompile the program first if needed to bring it up to date.</li>
+  <li><code>dist</code>. Create an archive named <code>hw6.tar</code> containing
+    up-to-date versions of all of the files that you need to turn in (source
+    files, <code>Makefile</code>, <code>git.log</code>
+    file, and <code>README</code>).
+    This is the file you should turn in  when you are done.</li>
+  <li><code>clean</code>. Remove any <code>.o</code> files, executables, emacs
+    backup files (<code>*~</code>), and any other files generated as part of making the program,
+    leaving only the original
+    source files and any other  files in the directory unrelated to the project.</li>
+  </ul>
+  You may add any additional targets that you wish for your convenience. There
+  are some ideas for other useful targets in the <a href="#implhints">Implementation Hints</a> section,
+  below.</li>
+  <li>You should create a <code>README</code> file and include it in the archive
+    you turn in. This file should give a brief summary of:
+    <ul>
+	<li>Who was responsible for which part of the project, and how the work was
+	  divided.</li>
+	<li>A brief description of how your heap (free list) data structure is organized
+	  and the algorithms used to manage it.</li>
+	<li>A summary of any additional features or improvements in your memory manager
+	  or benchmark code. If you did any extra credit parts of the assignment,
+	  be sure to describe that. If you experimented with various quantities such
+	  as the minimum size of a block fragment to keep on the free list, describe
+	  your experiments and results obtained.</li>
+	<li>A summary of the results you observed on several runs of your <code>bench</code> program.
+	  This does not need to be exhaustive (or exhausting), but it should give
+	  the reader an idea of how your code worked, how fast it was, and how efficient
+	  it was in its use of memory.</li>
+	<li>A summary of any resources you consulted for information about memory management
+	  algorithms. <strong>Your code, of course, must be your own, but feel free to research
+	  and explore memory management topics.</strong></li>
+	</ul>
+  <li>When you are ready to hand in your project, run the command <code>git log</code> and
+    capture the output in a file <code>git.log</code> showing the change commit
+    history in your repository. Include this <code>git.log</code> file with the
+    other files you submit.</li>
+  <li>Finally, your code should be of the usual high quality, with clean layout,
+    good comments, and so forth (refer to Code Quality Requirements 
+	of previous assignments for more details). 
+In particular, the comments describing the free list data structures  should
+contain a complete but succinct description of this data so that someone can
+read these definitions and understand them without tracing the
+code that uses them.
+  </li>
+  </li>
+</ul>
+
+<h3 id="teamwork">Working with a Team</h3>
+  <p><strong>You are required to work in a team of 2 on this project.</strong> </p>
+
+Your team should turn in a
+  single assignment, and <strong>all members will receive the same grade on the project.</strong>
+  Be sure to have all of your names on the assignment, but only turn  in a <strong>single</strong> 
+copy under one of your names (and turn in the project under the
+  same name for all parts, please). <strong>Also remember that if you wish to use a
+  late day or two for the final part of the project, all members must
+  have those late days available</strong>.</p>
+
+<p><strong>You must work with your teammate on this assignment; you cannot work alone. Part
+  of the purpose of the assignment is for you to gain experience handling source code when
+  more than one person is working on a project.</strong></p>
+
+<h4 id="divide_work">Dividing the Work</h4>
+In a production implementation there would likely be a single <code>.c</code> file
+  containing all of the <a href="#mem_mgt_what">Memory Management Package</a> functions described above. 
+One person would be responsible for
+  the implementation of that file, while another person would test it. But
+  for this class, we want to divide the work so that you and your teammate(s)
+  work on the details and use a <code>git</code> repository to manage the shared
+  files. Because of that, you should split your Memory Management Package code into the following half-dozen
+  files:</p>
+<ul>
+  <li><code>mem.h</code> - header file containing the public declarations of the
+    functions (including appropriate comments). This is the interface that clients
+     of your <code>getmem</code>/<code>freemem</code> package would use.</li>
+  <li><code>getmem.c</code> - implementation of function <code>getmem</code>.</li>
+  <li><code>freemem.c</code> - implementation of function <code>freemem</code>.</li>
+  <li><code>get_mem_stats.c</code> - implementation of function <code>get_mem_stats</code>.</li>
+  <li><code>print_heap.c</code> - implementation of function <code>print_heap</code>.</li>
+  <li><code>mem_impl.h</code> - header file with declarations of internal implementation
+    details shared by more than one of the above files. This information is 
+    required in more than one of the implementation files, but is not part
+    of the <strong>public</strong>
+    interface, which is declared in file <code>mem.h</code>. In particular,
+    this is where the declarations of the free list data structure(s) should
+    reside.</li>
+</ul>
+
+<p>One person in your team should be the primary implementor in charge of <code>getmem.c</code>;
+  another person is in charge of <code>freemem.c</code>. Similarly, you should
+  divide responsibility for <code>get_mem_stats.c</code>, <code>print_heap.c</code>, 
+the source files for the <a href="#bench_and_test">Benchmark and Testing Program</a>, and <code>Makefile</code>. 
+You should share responsibility
+  for the header files as needed. <strong>Each of you is responsible for testing 
+   code produced by your teammate.</strong></p>
+
+
+<h4 id="reponotes">Git Repository Notes</h4>
+<p>You and your teammate will be given a newly created Git repository on
+  <a>https://gitlab.cs.washington.edu</a>.
+
+To get a new working copy of a repository if you are in group <code>qz</code>,
+  you would use the following <code>git</code> command:</p>
+<p>	<code>git clone  git@gitlab.cs.washington.edu:cse374-15wi-proj/hw6-qz</code></p>
+
+
+<h3 id="implhints">Implementation Hints (the "How")</h3>
+<p>Here are a few ideas that you might find useful. Feel free to use or ignore
+  them as you wish, although you do want to use the <a href="#pointers">64-bit pointer types</a> correctly.</p>
+
+
+<h4 id="developtest">Developing and Testing</h4>
+<p>As with all projects, you should start (very) small and incrementally build
+  up the final project. Here are some ideas:</p>
+<ul>
+  <li>You can create initial versions of <code>getmem</code> and <code>freemem</code> by
+    implementing them as calls to <code>malloc</code> and <code>free</code>(!).
+    That will allow work on the benchmark program to proceed independently of
+    <code>getmem</code> and <code>freemem</code>. Plus if there is a problem
+    later in the project, you can always substitute these stub versions to see
+    if the trouble is in <code>getmem</code>/<code>freemem</code> or in the benchmark
+    program.</li>
+  <li>You can implement <code>getmem</code> first by itself. Just have <code>freemem</code> return
+    without doing anything. Get <code>freemem</code> working later.</li>
+  <li>Start small with  tests involving very few <code>getmem</code>/<code>freemem</code> requests.</li>
+  <li>The <code>print_heap</code> function can be very helpful during debugging. Get it working
+    early. Also, <code>gdb</code> can be very helpful in exploring the free list and examining
+    the operation of your code.</li>
+  <li>Write several small test programs whose effect on the heap you can predict by hand,
+    then use the free list printout (above) and/or <code>gdb</code> to check
+    that it really works as you expect.</li>
+  <li>Don't be shy about adding lots of targets to your <code>Makefile</code> to
+    compile and run small test programs, or run the benchmark program with various
+    argument
+    values. If you find yourself typing the same command more than a few times
+    to run a test, add it to your <code>Makefile</code> as the command for a
+    target with a suitable name (e.g., <code>test17</code>, <code>test42</code>,
+    <code>reallybigtest</code>, etc.).</li>
+  <li>The <code>get_mem_stats</code> function may be useful during debugging
+    to see  the effect on the free list  of various patterns of <code>getmem</code> and <code>freemem</code> requests.
+    Don't feel constrained to use it only to produce the required benchmark
+    program reports.</li>
+  <li>While you are not required to use <a href="http://en.wikipedia.org/wiki/Assert.h"><code>assert</code>s</a> in your program,
+    they can be particularly useful while you are testing and debugging, particularly
+    to check that pointers are not <code>NULL</code> when they shouldn't be.
+    Use them liberally and add targets to your <code>Makefile</code> to generate debugging
+    versions of your code.</li>
+</ul>
+
+
+<h4 id="pointers">64-bit Pointers and ints</h4>
+<p>Your code should work on, and we will evaluate it on, the CSE Fedora systems (<code>klaatu</code> and the 
+	CSE virtual machine). <strong>These are 64-bit machines, which means pointers and addresses are 64-bit quantities.</strong> 
+	Your code will probably work on other 64-bit machines, and, if you're careful, will probably work on 32-bit 
+	machines if it is recompiled, although we won't test that.</p>
+<p>One thing that is needed in several places is to <strong>treat pointer values as unsigned integers 
+	so we can do arithmetic to compute memory block addresses and sizes</strong>. 
+	We need to be able to cast 64-bit values between integer and pointer types without losing any information. 
+	Fortunately the library <code>&lt;inttypes.h&gt;</code> contains a number of types and macros that make 
+	the job easier (and fairly portable!). The main type we want to use is <code>uintptr_t</code>, which is a 
+	type that is guaranteed to be the right size to hold a pointer value so we can treat it as an unsigned integer. 
+	A pointer value (<code>void*</code> or any other pointer type) can be cast to <code>uintptr_t</code> 
+	to create an integer value for arithmetic, and  <code>uintptr_t</code> values can be cast to pointers if they 
+	hold  integers  that we want to treat as addresses. (There is also an <code>intptr_t</code> type that is a 
+	signed integer type of the right size to hold a pointer, but for our project it would be best to stick with 
+	unsigned values.)</p>
+<p>You can print pointers and <code>uintptr_t</code> values with <code>printf</code>. 
+	Use format <code>%p</code> to print a pointer value, e.g., <code>printf(&quot;%p\n&quot;, ptr);</code>. 
+	For <code>uintptr_t</code> values, since these are stored as long, unsigned integers on our 64-bit systems, 
+	they can be printed as decimal numbers using the <code>%lu</code> format specifier: 
+	<code>printf(&quot;%lu\n&quot;,uintvalue);</code>. It turns out that <code>&lt;inttypes.h&gt;</code> 
+	defines  string macros that make it possible to print values without  knowing the actual size of the underlying type. 
+	The magic incantation to print an <code>uintptr_t</code> value <code>ui</code> is  
+	<code>printf(&quot;%&quot; PRIuPTR &quot;\n&quot;, ui);</code>. There are other formatting macros to do things 
+	like print signed integer pointer values as decimal numbers (<code>PRIdPTR</code>) or in hex  (<code>PRIxPTR</code>). 
+	See a good C reference for details. </p>
+	
+	
+<h4 id="mem_mgt_impl">Memory Management Package</h4>
+<p><a href="#mem_mgt_what">The Technical Requirements section</a> describes <strong>what</strong> you need to do. 
+	This section gives some ideas
+  about <strong>how</strong> to do it. We will talk about this further in class, and you should
+  take advantage of the <a href="https://catalyst.uw.edu/gopost/board/bdmyers/38555">online class discussion board</a> 
+  to trade questions, ideas, and suggestions.</p>
+<p>The basic idea behind the memory manager is fairly simple. At the core, the
+  <code>getmem</code> and <code>freemem</code> functions share a single data
+  structure, the <em>free list</em>,
+  which is just a linked-list of free memory blocks that are available 
+  to satisfy memory allocation requests. Each block on the free list starts with
+  an <code>uintptr_t</code> integer that gives its size followed by a pointer to the next block on
+  the free list. To help keep data  in dynamically allocated blocks properly
+  aligned, we require that all of the blocks be a multiple of 16 bytes in size,
+  and that their addresses also be a multiple of 16.</p>
+<p>When a block is requested from <code>getmem</code>,
+    it should scan the free list looking for a block of storage that is at least
+    as large as the amount requested, delete that block from the free list, and
+    return a pointer to it to the caller. When <code>freemem</code> is called,
+    it should return the given block to the free list, combining it  with
+    any adjacent free blocks if possible to create a single, larger block instead
+    of several smaller ones.</p>
+<p>The actual implementation needs to be a bit more clever than this.
+  In particular, if <code>getmem</code> finds a block on the free list that is
+  substantially larger than the storage requested, it should divide that block
+  and return a
+  pointer to a portion that is large enough to satisfy the request, leaving
+  the remainder on the free list. But if the block is only a little bit larger
+  than the requested size, then it doesn't make sense to split it and leave a
+  tiny chunk on the free list that is unlikely to be useful in satisfying future
+  requests. You can experiment with this threshold and see what number is
+  large enough
+  to prevent excessive fragmentation, without
+  wasting too much space that could have been used to satisfy small requests.
+  The actual number should  be a symbolic constant given by a <code>#define</code>  in
+  your code.</p>
+<p>What if no block on the free list is large enough to satisfy a <code>getmem</code> request?
+  In that case, <code>getmem</code> needs to acquire a good-sized block of storage
+  from the underlying system, add it to the free list, then split it up, yielding
+  a block that will satisfy the request, and leaving the remainder on the free
+  list. Since requests to the underlying system are (normally) relatively expensive,
+  they should yield a reasonably large chunk of storage, say at least 4K or 8K
+  or more, that is likely to be useful in satisfying several future <code>getmem</code> requests.
+  Normally the same amount is acquired each time it is necessary to go to the
+  underlying system for more memory. But watch out for really big <code>getmem</code> requests.
+  If <code>getmem</code> is asked for, say, a 200K block, it
+  needs to get at least that much in
+  a single chunk, since the underlying system cannot be relied on to return adjacent
+  blocks of storage on successive calls.</p>
+<p>So what is &quot;the underlying system&quot;? For our purposes, it is the
+  standard <code>malloc</code>  function!
+  Your memory manager should acquire large blocks of storage from <code>malloc</code>  when
+  it needs to add blocks to its free list. <code>malloc</code>  normally guarantees that
+  the storage it returns is allocated on 16-byte or larger boundaries
+  on
+  modern systems, so we don't need to worry about whether the block we get from
+  <code>malloc</code> is properly aligned.</p>
+<p>Notice that a request for a large block will happen the very first time <code>getmem</code> is
+  called(!). When a program that uses <code>getmem</code> and <code>freemem</code> begins
+  execution, the free list should be initially empty. The first time <code>getmem</code> is
+  called, it should discover that the (empty) free list does not contain a
+  block large enough for the request,
+  so it will have to call the underlying system to acquire some storage to work
+  with.</p>
+<p>What about <code>freemem</code>? When it is called, it is passed a pointer
+  to a block of storage and it needs to add this storage to the free list, combining
+  it with any immediately adjacent blocks that are already on the list. What
+   <code>freemem</code> <em>isn't</em> told is how big the block is(!). In order
+   for this to work, <code>freemem</code> somehow has to be able to find the
+   size of the block. The usual way this is done is to have <code>getmem</code> actually
+   allocate a
+   block of memory that is a bit larger than the user's request,
+   store the block size at the beginning of the block, and return to the caller
+   a pointer that actually points a few bytes <em>beyond</em> the real start
+   of the block. Then
+   when 
+   <code>freemem</code> is called, it can take the pointer it is given, subtract
+   the appropriate number of bytes to get the real start address of the
+   block,
+   and find
+   the size of the block there.</p>
+<p>How is <code>freemem</code> going to find nearby blocks and decide whether
+  it can combine a newly freed block with one(s) adjacent to it? There are various
+  ways to do this (as usual), but a good basic strategy is for <code>getmem</code> and <code>freemem</code>  to
+  keep the blocks on the free list sorted in order of ascending memory address.
+  The block addresses plus the sizes stored in the blocks can be used to
+  determine
+  where a new block should be placed in the free list and whether it is, in fact,
+  adjacent to another one.</p>
+<p>It could happen that a request to <code>freemem</code> would result in one
+  of the underlying blocks obtained from the system becoming totally free, making
+  it possible to return that block to the system. But this is difficult to detect
+  and not worth the trouble in normal use, so you shouldn't deal with this
+  possibility in your code.</p>
+
+
+<h4 id="benchmark_impl">Benchmark and Testing Program</h4>
+<p>The command line can contain several integer parameters. These need to
+  be converted from character strings (&quot;500&quot;) to binary <code>int</code> values.
+  There are various library functions that are useful: look at <code>atoi</code> and
+  related ones. <strong>Take advantage of the Linux <code>getopt</code> library function
+  if it helps.</strong></p>
+<p>The benchmark program relies heavily on random numbers. The standard library
+  function <code>rand</code> can be used to generate sequences of pseudo-random
+  numbers. Given a particular starting number (the seed), <code>rand</code> (or
+  any pseudo-random number generator) will always generate the same sequence
+  of numbers on successive calls. This can be very helpful during testing (i.e.,
+  things
+  are basically random, but the sequence is reproducible). If you want to generate
+  a different sequence of numbers each time the program is executed, you can
+  set the seed to some quantity that is different on each run - the system time-of-day
+  clock is a frequent choice, and should be the default if no seed is given on
+  the
+  benchmark program command line. Alternatively, modern Linux systems provide
+  a special file <code>/dev/urandom</code> that returns random bytes whenever
+  it is read, and you can read bytes from here to get a random starting value.</p>
+<p>One of the benchmark quantities that should be printed is the processor time
+  used. The <code>clock</code> library function can be used to measure this.
+  Store the time right before starting the tests, then subtract this beginning
+  time from
+  the
+  current clock time whenever you need to get the elapsed time. Unfortunately,
+  on many Linux systems <code>clock</code> is updated infrequently. If your test
+  is fast enough that
+  <code>clock</code> has the same value before and after the test, don't worry
+  about it. Alternatively you can explore whether there are better timing functions
+  available. <strong>If you use one of these please be sure it is available on the CSE
+  Linux machines so the program will work when we run it.</strong></p>
+<p>Finally, the benchmark program needs to keep track of all of the pointers
+  returned by <code>getmem</code> but not yet freed, and randomly pick one of
+  these to free when the &quot;coin flip&quot; says to free some storage. The
+  obvious way to handle this is to allocate a &quot;big enough&quot; array using <code>malloc</code> 
+(<em>not</em> using <code>getmem</code>! Why?) and store the pointers there. When a pointer is
+  picked randomly to be freed, you can move another pointer from the end of the
+  list to
+  the spot occupied by the freed pointer and reduce the size of the list by 1.
+  That way, picking the pointer and updating the list can be done in <em>O</em>(1)
+  (constant) time, so the order in which the pointers are picked won't affect
+  the time needed
+  by the
+  benchmark
+  program
+  itself
+  to
+  run the tests.</p>
+
+
+<h3 id="extracredit">Extra Credit</h3>
+<p>Here are a couple of things you could add to your memory manager once it's
+  working.</p>
+<p><strong><em>DO NOT ATTEMPT ANY OF THIS</em> until you have completed the basic assignment
+  and turned it in.</strong></p>
+<ul>
+  <li>(easy) If <code>getmem</code> always starts scanning the free
+    list from the beginning when it is looking for a block of suitable size,
+    it is likely that eventually there will be lots of little fragments of free
+    space at the beginning of the list. We can reduce fragmentation, and speed
+    things
+    up,
+    if each subsequent
+    search starts from where the previous search left off, wrapping around to
+    the
+    front of the free list if the end is reached before finding a suitable block. How
+    does the output of your benchmark program change if you do this?<br />
+    <br>
+  </li>
+  <li>(harder) Replace malloc and free with your implementation. You should be able to link your unchanged HW5 code
+with the HW6 malloc and free and have it run. Doing this will require three steps: 1) rename getmem and freemem to malloc and free (easy part), 2) replace calls to malloc() in your implementation of getmem() with calls to <a href="http://man7.org/linux/man-pages/man2/mmap.2.html">mmap</a>, 3) properly link HW5 code with your malloc/free implementation.
+  <li>(harder) Modify the free list and memory allocation routines so that blocks
+    can be added to the free list and combined with adjacent blocks in constant
+    time. One way to do this is the following, known as the <em>boundary tag</em> method. In addition to the header information
+    at the beginning of each block containing its size, every block, both allocated
+    and on the free list, should contain an extra few bytes at the end with length
+    information and/or extra pointers and/or &quot;free/allocated&quot; bits.
+    The idea is that when a block is being freed, we can look at the adjacent storage in the heap to find the end and beginning of the previous and 
+    next blocks, and from there we can determine whether they are free or allocated
+    and 
+    how big
+    they are without having to search the free list. </li>
+</ul>
+
+<p>For more information, in addition to Google and Wikipedia, an authoritative
+  discussion is in Sec. 2.5, Dynamic Storage Allocation, in <em>The Art of Computer
+  Programming, Vol. I: Fundamental Algorithms</em>, by Donald Knuth. Doug Lea's
+  web site (<a href="http://g.oswego.edu/dl/html/malloc.html">http://g.oswego.edu/dl/html/malloc.html</a>)
+  has good information about the allocator that he wrote that is basis of the <code>malloc</code>/<code>free</code> implementations in  many
+  C distributions.</p>
+
+<h2>Assessment</h2>
+
+Your solutions should:
+<ul>
+	<li>Be correct source files, etc., that compile and run without errors or warnings when compiled and executed 
+	on our reference systems (<code>klaatu</code> and the CSE virtual machine) using <code>gcc</code> with the 
+	<code>-Wall</code> option.</li>
+	<li>Build without errors when <code>make</code>is used to run your <code>Makefile</code>.</li>
+	<li>Be in good style, including indentation and line breaks, and following the given 
+		<a href="#techreqts">Technical Requirements</a> and <a href="#addtlreqts">Additional Requirements</a>.</li>
+</ul>
+<p>
+Identifying information including:
+<ul>
+	<li>your name (more than one if people share responsibility for a file)</li>
+	<li>CSE 374 Homework 6</li>
+	<li>the date, and</li>
+	<li>the purpose of the file</li>
+</ul>
+<p>
+should appear as comments at the top of each of your files.
+
+<h2>Turn-in Instructions</h2>
+<p>You are responsible for making sure all the correct files get turned in to the Dropbox.  
+	You can download what you have submitted to verify that all files are present, the contents are what you intended, and they are not corrupted.
+	
+<p>To help organize the project, and to stay on schedule, you should turn in
+  this assignment in three phases:</p>
+<h3 id="part1">Part 0 (1%): Submit to Catalyst about teammates</h3>
+Due Saturday, February 21, 2015 at 11:00 PM <p>
+Form a 2 person team. <font color="#FF0000">Now!</font></h4>
+<p>As soon as possible, but no later than Saturday, February 21, 2015 at 11:00 PM you must pick your teammate and notify us. One of you (only!) should submit a plain text file to Catalyst that <strong><u>must</u> contain</strong></em> 
+<ul>
+	<li><strong>each members' UW netids, one per line.</strong></li>
+</ul> 
+	We
+    will use this information to assign your team to a Unix group and set
+    up a <a href="#reponotes"><code>git</code> repository</a> you can use for this assignment.</p>
+
+	<p>Your team will receive 1 point (1%) of the total credit for the assignment if you follow these instructions  
+		<em>exactly </em> (exactly one file with the right format and correct contents(uwnetids)).</p>
+
+
+<h3 id="part2">Part 1 (14%): Header files and repository</h3>
+Due Thursday, February 26, 2015 at 11:00 PM <p>
+14% of the total credit
+  for the entire assignment will be awarded for turning in a <strong>complete</strong> set of
+  header
+  files
+  and
+   skeleton implementations of everything required for the assignment, including
+  the basic <code>Makefile</code>, and having these properly checked in to your <code>git</code> repository.<p>
+  The header files should be essentially complete; the skeleton (stub) implementations
+  (the <code>.c</code> files)
+  can contain functions with either empty implementations or a dummy <code>return</code>  statement
+  as appropriate. These files should be complete enough to compile without errors
+  when the files are unpacked in a directory on <code>klaatu</code> or the 64-bit CSE Linux VM and
+  a <code>make</code> command
+  is executed there. The implementations may be more complete than this, but
+  they only need to compile cleanly at this point; nothing needs to work yet. These files
+  should also include a skeleton of the benchmark program which <code>#includes</code>  the necessary headers and contains skeleton main function (<code>return 0;</code> is
+  perfectly fine). <p>
+	All files must contain appropriate comments, particularly
+  heading comments
+  on functions
+  and
+  interfaces, and information in each file to identify you and the project.</p>
+<p>You should also run the command <code>git log </code>  showing the contents
+  of your repository 
+  and capture the output in a file named <code>git.log</code>.
+   Create
+  a <code>tar</code> archive containing the source files and the <code>git.log</code>  file
+  and turn  in that archive file using the regular dropbox.</p>
+
+<h3 id="part3">Part 2 (85%): Final code</h3> 
+Due Thursday, March 5, 2015 at 11:00 PM <p>
+(85%) This contains the complete project, including
+  the <code>README</code> file and everything else requested above. Use the <code>make
+  dist</code> target in your <code>Makefile</code> to create an archive containing all of the requested
+  files and turn that in.</p>
+
+<!--end HTML content-->
+             </div><!-- section -->
+          </div><!-- content -->
+
+          <div id="legalese-footer">
+            <div class="region region-legalese-footer">
+              <div id="block-block-1" class="block block-block first last odd">
+                <div class="content">
+                  <p class="legalese">Computer Science &amp; Engineering <br/>
+                  University of Washington <br/> Box 352350 <br/>
+                  Seattle, WA 98195-2350 <br/> (206) 543-1695 voice, (206) 543-2969 FAX
+                  </p>
+                  <p class="legalese">
+                    <a href="//www.washington.edu/online/privacy" target="_blank">UW Privacy Policy</a> and 
+                    <a href="//www.washington.edu/online/terms" target="_blank">UW Site Use Agreement</a>
+                  </p>
+                </div><!-- content -->
+              </div><!-- /.block -->
+            </div><!-- /.region -->
+          </div><!-- legalese-footer -->
+        </div><!-- /#page -->
+      </div><!-- /#page-wrapper -->
+    </div>
+  </div>
+</body>
+</html>

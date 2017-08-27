@@ -1,0 +1,58 @@
+Script started on Thu 05 Feb 2015 10:45:10 PM PST
+]0;tposey28@klaatu:~/Documents/hw4[?1034h[tposey28@klaatu hw4]$ gdb gasp
+[?1034hGNU gdb (GDB) Fedora 7.6.1-46.fc19
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-redhat-linux-gnu".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /homes/tposey28/Documents/hw4/gasp...done.
+(gdb) break 27    gasp.c:27
+Breakpoint 1 at 0x40072f: file gasp.c, line 27.
+(gdb) break gasp.c:50
+Breakpoint 2 at 0x4007fd: file gasp.c, line 50.
+(gdb) run this test.txt
+Starting program: /homes/tposey28/Documents/hw4/gasp this test.txt
+
+Breakpoint 1, main (argc=3, argv=0x7fffffffe538) at gasp.c:29
+29		int optNum = options(argc, argv);
+Missing separate debuginfos, use: debuginfo-install glibc-2.17-20.fc19.x86_64
+(gdb) print ar g rgvb [1]
+$1 = 0x7fffffffe7a8 "this"
+(gdb) continue
+Continuing.
+
+Breakpoint 2, processFile (file=0x7fffffffe7ad "test.txt", 
+    pattern=0x7fffffffe3e0 "this") at gasp.c:50
+50		if (inputFile == NULL) {
+(gdb) backtrace
+#0  processFile (file=0x7fffffffe7ad "test.txt", pattern=0x7fffffffe3e0 "this")
+    at gasp.c:50
+#1  0x00000000004007b9 in main (argc=3, argv=0x7fffffffe538) at gasp.c:39
+(gdb) list
+45	// If the given file does not exist or can not be opened, an error message is
+46	// printed to stderr and the function call ends.
+47	void processFile(char* file, char* pattern) {
+48	        /*inputFile is a  file pointer for the given file name*/
+49		FILE* inputFile = fopen(file, "r");
+50		if (inputFile == NULL) {
+51			fprintf(stderr, "%s does not exist\n", file);
+52			return;
+53		}
+54		int lineCount = 0;
+(gdb) print file
+$2 = 0x7fffffffe7ad "test.txt"
+(gdb) print inputFile
+$3 = (FILE *) 0x602010
+(gdb) continue
+Continuing.
+test.txt this
+[Inferior 1 (process 18600) exited normally]
+(gdb) quit
+]0;tposey28@klaatu:~/Documents/hw4[tposey28@klaatu hw4]$ exit
+exit
+
+Script done on Thu 05 Feb 2015 10:53:18 PM PST

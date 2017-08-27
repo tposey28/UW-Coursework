@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+ "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>CSE 414 Homework 7</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+dl dt { font-weight: bold; }
+.style1 {color: #006600}
+.red {
+	color: #F00;
+}
+.red {
+	color: #F00;
+}
+.red {
+	color: #F00;
+}
+.red {
+	color: #F00;
+}
+</style>
+<body>
+<h1>CSE 344 Homework 7</h1>
+<dl>
+  <dt>Objectives:</dt>
+  <dd>To get experience with database application development
+  and transaction management.</dd>
+  
+  <dt>Assignment tools:</dt>
+  <dd><a href="http://www.microsoft.com/sqlserver" target="_blank">SQL Server</a> through <a href="https://azure.microsoft.com/en-us/services/sql-database/" target="_new">SQL Azure</a>. </dd>
+  <dd><a href="hw7.tar.gz">starter code files</a></dd>
+  
+  <dt>Additional files (you normally don't need these):</dt>
+  <dd><a href="http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=a737000d-68d0-4531-b65d-da0f2a735707&srcdisplaylang=en&u=http://download.microsoft.com/download/D/6/A/D6A241AC-433E-4CD2-A1CE-50177E8428F0/1033/sqljdbc_3.0.1301.101_enu.tar.gz" target="_blank">SQL Server JDBC Jar files</a> (the JDBC driver for older versions of Java), <br>
+
+    <dt>Due date:</dt>
+    <dd>Sunday, May 29, 2016, at 11:00 pm. Turn in your solution using the assignment drop box linked from the main course web page.</dd>
+ <!--  For future assignments, we need to change Query.java so that the one-hope is changed to direct and two hop is changed to one hop (or modify directions) Make it clear that the correct search will be used in FligthService.java for grading-->
+  <dt>What to turn in:</dt>
+  <dd>Customer database schema in <code>setup.sql</code>, 
+  completed version of the  <code> Query.java</code> starter code file, and the dbconn.properties file.</dd>
+</dl>
+
+<p>
+<em>
+Read this whole document before starting this project. There is a lot of
+valuable information here, including the Final Comments section at the bottom.
+</em>
+
+<p>
+Congratulations, you are opening  your own flight booking service!
+
+<p>
+You have access to a flights database. You will provide a service
+that lets users search through the database and book flights.
+
+<p>
+In this homework, you have two main tasks.  The first is to design a 
+database of your customers and the flights they book. The second task
+is to complete a working prototype of your flight booking application
+that connects to the database then allows customers to use a  command-line
+interface to search, book, and cancel flights.
+We have already provided code for a complete UI and partial back end; 
+you will implement the rest of the back end.
+In real-life, you would develop a Web-based interface instead of a command-line interface, but we use a command-line interface to simplify this homework.
+
+<h3>Task 0: Running the starter code (0 points)</h3>
+
+<p>
+  Your system will be a Java application. Download the <a href="hw7.tar.gz" target="_blank">starter code files</a>; you will see the following files:
+<ul>
+<li><code>FlightService.java</code>: the command-line interface to your flight-booking service.
+  Calls into <code>Query.java</code> to run customer transactions.
+<li><code>Query.java</code>: code to run customer transactions against
+  your database, such as booking flights and reviewing reservations.
+<li><code>dbconn.properties</code>: a file containing settings to connect
+  to your database. You need to edit it before running the starter code.
+<li><code>sqljdbc4.jar</code>: the JDBC to SQL Server driver.  
+This tells Java how to connect to a SQL Azure database server, and needs to be 
+in your <code>CLASSPATH</code> (see below)
+<li><code>sqljdbc.jar</code>: the JDBC to SQL Server driver for older versions of Java. Use this driver only if the other one does not work for you. 
+</ul>
+
+<p>
+To run the starter code, you can simply run javac and java from the command line.
+
+<p>Please follow the instructions for your platform as shown in the table below. The last command launches the starter code. Normally, you run it like this:</p>
+<p><code>java FlightService</code> </p>
+
+  <table border="1">
+<thead style="font-weight: bold">
+  <tr><th>Windows</th>
+      <th>Linux or Mac</th>
+  </tr>
+</thead>
+
+<tbody><tr>
+<td><pre>
+cd \where\you\unzipped\the\starter\code
+<em>[replace the directory below with your JDK's bin\ directory]</em>
+path C:\Program Files\Java\jdk1.7.0_67\bin;%path%
+set CLASSPATH=.;sqljdbc4.jar
+javac -g FlightService.java Query.java
+java FlightService
+</pre></td>
+
+<td><pre>
+cd /where/you/unzipped/the/starter/code
+
+
+export CLASSPATH=.:sqljdbc4.jar
+javac -g FlightService.java Query.java
+java FlightService
+</pre></td>
+</tr></tbody>
+</table>
+
+<p>If you got an error message about the JDBC driver when running the above, try to use the older driver <em>sqljdbc.jar</em> instead of sqljdbc4.jar.
+
+
+
+<p>Or you can use Eclipse
+      <ol>
+        <li>Create a workspace with a project. We'll refer to this project as hw7 from now on. </li>
+        <li>Copy the .java files into the project src/ folder. </li>
+        <li>Copy the .jar and .properties files into the hw7 folder. Make sure you add the necessary values to the .properties file now. </li>
+        <li>Right click on the project, choose Build Path -&gt; Configure Build Path..., then Add Jars..., then expand hw7 and select the sqljdbc[4].jar file. Click Ok and then Ok again to close the menus. </li>
+        <li>Click the Run button. 
+      </ol>
+
+    <p>You also need to access your <code>Flights</code> database on SQL Azure from Homework 3. Modify <code>dbconn.properties</code> with your servername, username, and password for SQL Azure. This allows your java program to connect to the database on SQL Azure. In practice, in is not safe to store passwords openly in text files, but it is ok for this assignment. Also, you can use the small version of the flights dataset. We are assuming that all queries search and book flights for July 2015, which is in the small dataset. It's ok if your database contains more flight data.
+      
+
+
+<p>Now you should see the command-line prompt for your Filght service:
+<pre>
+ *** Please enter one of the following commands ***
+> login &lt;username&gt; &lt;password&gt;
+> search &lt;origin_city&gt; &lt;destination_city&gt; &lt;direct&gt; &lt;date&gt; &lt;nb itineraries&gt;
+> book &lt;itinerary_id&gt;
+> reservations
+> cancel &lt;reservation_id&gt;
+> quit
+></pre>
+
+
+<p>The <code>search</code> command works (sort of).  Try typing:
+<pre>
+search "Seattle WA" "Boston MA" 1 14 10
+</pre>
+
+<p> The user is requesting to list the top 10 direct flights from Seattle to Boston on July 14th 2015 ordered by flight time, which is the sum of the actual_time values for all flights in the itinerary.
+      
+<p>You should see a list of flights between the origin and destination city for your desired data. The starter code only lists direct flights.
+
+<h3>Requirements</h3>
+      
+<p>The requirements for the flight service system are the following:
+
+      <ul>
+        <li><strong>login</strong> command takes a <tt>username</tt> and <tt>password</tt> as input. It checks that the user exists in the database and that the password matches. You can simply populate your user database outside of this application.
+        
+        <li><strong>search</strong> command takes as input an
+        <tt>origin city</tt>, a <tt>destination city</tt>, a
+        <tt>boolean</tt> value to indicate if the user wants to search
+        only for direct flights or if one hop is ok, the
+        <tt>date</tt>, and the <tt>nb itineraries</tt>. For one hop
+        flights, different carriers can be used for the flights. We
+        only have flights for July 2015 and July 2005 in
+        flights-small.csv. So the date should simply be an integer
+        indicating which day in July 2015 the user wants to book. Note
+        that the starter code ignores the month and year
+        entirely. Change the query to fix the month and year to July
+        2015 or you can add month and year as extra, optional,
+        arguments. But note that we will test your Query.java using
+        the starter FlightService.java. The command should first list
+        all the direct flights sorted on actual_time, then list the
+        flights with one stop also sorted by total actual_time. Ignore
+        flights that have a null actual_time. The number of
+        itineraries argument enables the user to limit the result to
+        only top-k itineraries. Each itinerary should have a unique
+        <tt>itinerary id</tt>. The <tt>itinerary id</tt> can simply
+        be the <tt>row id</tt>, which is the index of
+        the itinerary in the sorted search result. If no itineraries match the
+        search query, the system should return an informative error message.
+        The user need not be logged in to search for flights. It is up to you how you want to display
+        the search results.  We will only test that the result includes
+        the number of flights (1 or 2) and the total flight time. But we expect your code to display more information.
+
+        <li><strong>book</strong> command enables a user to book an
+        itinerary. We only book one-way itineraries. To book a
+        round-trip, the user needs to book two separate
+        itineraries. The user must be logged in to book an
+        itinerary. The user must enter a valid itinerary id. The user
+        may only book an itinerary displayed in the most recent search
+        query. To implement this feature, you should remember the
+        itineraries returned by the latest search in your Java code.
+
+        <li><strong>reservations</strong> command lists all
+       reservations for the user. Each reservation must have a unique
+       identifier (which is different from the itinerary ID).  The
+       user must be logged in to view reservations.
+
+      <li><strong>cancel</strong> command enables a user to cancel an
+      existing reservation. The user must be logged in to cancel
+      reservations and must provide a valid reservation ID.
+        
+      </ul>
+      
+<p>
+<p>&nbsp;</p>
+<h3>Task 1: Customer database design (5 points)</h3> 
+
+<p>
+Your first task is to design and add tables to your flights database. You need to create at least a <code>Customer</code> table.  For each customer, the table should store a unique identifier, a full name, a zipcode, and a password. You should also create one or more tables to hold the reservations made by customers. The design of these tables are up to you. You can add other tables to your database as well.
+
+<p><strong>What to turn in: </strong>
+a single text file called <em>setup.sql</em> with CREATE TABLE and INSERT statements for your customer database that populate each table with a few tuples (minimum 8 tuples): you will turn in this file. This file should be runnable on SQL Azure through SQL Server Management Studio. Write a separate script file with DROP TABLE statements; it's useful to run it whenever you find a bug in your schema or data (don't turn in this file). 
+
+
+<p>&nbsp;</p>
+<h3>Task 2: Java customer application (20 points)</h3>
+
+<p>
+Your second task is to write the Java application that your customers will
+use, by completing the starter code.
+You need to modify only <code>Query.java</code>.  Except for the small change needed in Task 2A, do not modify <code>FlightService.java</code> because we will test your homework using the current version of <code>FlightService.java</code>.
+Actually, you can modify <code>FlightService.java</code> if you want to improve your application, but make sure we can still test your <code>Query.java</code> on the original <code>FlightService.java</code></p>
+      
+<p> <b> What to turn in: </b> the Java file <code>Query.java</code>.
+
+      
+
+<p>
+When your application starts, it shows the above menu of options to the
+user. Your task is to implement the functionality behind these options.
+
+<p>
+<strong>Be sure to use SQL transactions when appropriate. The same user
+      can log in multiple times from different terminals. Different users can also use the
+      same application at the same time from different terminals.</strong>
+
+
+<p>&nbsp;</p>
+<h4>Task 2A: Stop SQL Injection (5 points)</h4>
+
+<p>Consider the <code>search</code> function.
+
+<p>Now type this at the prompt:
+      
+<pre>search "Seattle WA" "Boston MA'  and actual_time > 300 and dest_city='Boston MA" 1 14 10
+</pre>
+      
+<p>What happens? You get only flights longer than 300 min.  Now type this:
+
+<pre>search "Seattle WA" "Boston MA'; create table Foo(a int); SELECT year, month_id,day_of_month,carrier_id,flight_num,origin_city,actual_time from Flights where origin_city = 'Seattle WA" 1 14 10
+</pre>
+
+<p>Check that this statement actually did successfully create a new table. Imagine if
+it did other things instead like drop tables or look up the list of customers and their passwords. This is SQL injection: hackers like to do it on Website interfaces 
+to databases.  We provide a correct, fixed function. Update FlightService.java to use
+the correct function. 
+
+
+<p>&nbsp;</p>
+<h4> Task 2B: Transaction management (15 points) </h3>
+
+<p>
+  You must use SQL transactions
+in order to guarantee ACID properties: you must define begin- and end-transaction statements, 
+and insert them in appropriate places in <code>Query.java</code>. In particular, you must 
+ensure that the following constraints are always satisfied, even if multiple instances of your 
+application talk to the database at the same time.
+
+<p><b>C1</b>. Each flight should have a maximum capacity that must not be exceeded. For this assignment, you can
+make it very small like 3. So only 3 people will be able to book any given flight.
+
+<p><b>C2</b>. A customer may have at most one reservation for any given day. If you choose to use multiple reservations for an itinerary, then ensure that a customer may have at most one itinerary for any given day.
+
+<p>You must use transactions correctly such that race conditions
+introduced by concurrent execution cannot lead to an inconsistent
+state of the database. For example, multiple customers may try to book
+the same flight at the same time. Your properly designed transactions
+should prevent that.</p>
+
+<p> Design transactions correctly. Avoid including user interaction inside a 
+SQL transaction: that is,
+don't begin a transaction then wait for the user to decide what she
+wants to do (why?). The rule of thumb is that transactions need to be as short as possible, but not shorter.</p>
+
+<p>&nbsp;</p>
+
+<p>When one uses a DBMS, by default <strong>each statement executes in its own transaction</strong>. To group multiple statements into a transaction, we use 
+<pre>BEGIN TRANSACTION</pre>
+<p>....
+<pre>COMMIT or ROLLBACK </pre>
+<p>This is the same when executing transactions from Java, by default each SQL statement will be executed as its own transaction. To group multiple statements into one transaction in java, you can do one of three things:
+
+<p><strong>Approach 1:</strong>
+<p>We provide you with three helper methods. So before your first statement in the transaction, simply execute
+<pre>beginTransaction();</pre>
+<p>When you are done with the     transaction, then call:
+<pre>commitTransaction(); </pre>
+<p>OR
+<pre>rollbackTransaction(); </pre>
+<p><strong>Approach 2: </strong>
+<p>You can execute the SQL code for START TRANSACTION and friends
+  directly, using the SQL we have provided in the starter code (also
+  check out <a href="http://msdn.microsoft.com/en-us/library/windowsazure/ee336270.aspx" >SQL Azure's transactions documentation)</a>:
+<pre>
+// When you start the database up
+Connection conn = [...]
+conn.setAutoCommit(true); // This is the default setting, actually
+conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+
+// In each operation that is to be a multi-statement SQL transaction:
+conn.setAutoCommit(false); // You MUST do this in order to tell JDBC that you are starting a multi-statement transaction
+
+beginTransactionStatement.executeUpdate();
+
+[... execute updates and queries.]
+
+commitTransactionStatement.executeUpdate();
+[OR]
+rollbackTransactionStatement.executeUpdate();
+
+conn.setAutoCommit(true);  // To make sure that future statements execute as their own transactions.
+</pre>
+<p>
+<strong>Approach 3:</strong>
+
+<pre>
+// When you start the database up
+Connection conn = [...]
+conn.setAutoCommit(true); // This is the default setting, actually
+conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+
+
+// In each operation that is to be a multi-statement SQL transaction:
+
+conn.setAutoCommit(false);
+[... execute updates and queries.]
+conn.commit();
+[OR]
+conn.rollback();
+conn.setAutoCommit(true);
+ 
+
+</pre>
+
+<p>When auto comit is set to true, each statement executes in its own
+transaction. With auto-commit set to false, you can execute many
+statements within a single transaction. By default, on any new
+connection to a DB auto-commit is set to true.
+
+<p>To test that your transactions work correctly, we recommend the
+  following (and this is how we will test your homework).  Place a
+  breakpoint in the middle of your transaction.  Run two (or more?)
+  instances of FlightService.java, say A and B.  Let both reach the
+  same point in the code then you decide which one you allow to
+  proceed, and thus control the order in which the transactions are
+  interleaved.  <p>
+
+
+<p>
+<b>FINAL COMMENTS</b>:
+<ul>
+<li><p>The starter code is designed to give you a gentle introduction
+   to embedding SQL into Java.  Start by running the starter code,
+   examine it and make sure you understand the part that works.
+   You will need to create new tables and slowly add code to the
+   application.
+
+</p>
+<li><p> The completed project has multiple simple SQL queries
+   embedded in the Java code.  Some queries are <em>parameterized</em>:
+   a parameter is a constant that is known only at runtime, and
+   therefore appears as a '?' in the SQL code in Java: you already
+   have examples in the started code.
+   </p>
+<li> We won't use recovery in this homework.  Instead you will rely on
+   the script file that you need to prepare for Task 1.  This file
+   contains all the CREATE TABLE and INSERT statements that are needed
+   to start your project.
+</ul>
+
+
+
+</body>
+</html>
+

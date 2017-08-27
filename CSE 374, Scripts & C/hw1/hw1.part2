@@ -1,0 +1,23 @@
+Taylor Posey
+CSE 374
+HW1 Part 2 Questions
+
+1. The wc command prints the byte, word, and line counts of the given files. Prints each file's counts on a seperate line if their are multiple, as well as a total cumulative line of all counts. The -l option makes the command print only the new line counts.
+
+2. 159  203 7688 /etc/passwd
+
+3. The kill command can stop a process, using it's PID as an argument.
+
+4. The $HOME variable stores the home directory for the user (which determines what ~ means).
+
+5. The $PATH variable stores the different directories that store programs, and the $PS1 variable determines what the shell prompt is for the session.
+
+6. The type command could help you find a command script that you misplaced.
+
+7. The which command is different that type because it looks for files that are located in directories specified by the $PATH variable.
+
+8. "echo Hello World! > something" prints the output to the given file, something, while "echo Hello World!" prints the output to the terminal/shell.
+
+9. If "echo Hello World! > something" is run, and then "echo more text > something" is run, the file something will contain the text "more text", but will not contain "Hello World!", since it will have been overwritten.
+
+10. "echo yet more text >> something" will append to the file something, and so something will contain "more text yet more text". 

@@ -1,0 +1,24 @@
+Ian Durra, Taylor Posey
+Homework #6 Part 2
+03/06/15
+CSE 374 Brandon Myers
+
+1. Taylor handled freemem, getmem and the MAKEFILE while Ian handled print_heap, get_mem_stats and bench. That being said there was large overlap as we extensively reviewed each others code.
+
+2. The free list is a struct that has a pointer to a size and another block. When allocated, our blocks are given more memory than needed so that the extra can be used for the user. A constant in mem_impl is used to denote the extra size, header. Our algorithm relies on pointer manipulation, and sorting our freelist. Our freelist is sorted so that all lower addresses are lower in the list. This allows us to easily split blocks, since we can determine if they are near each other simply by comparing sizes of adjacent blocks on the list. For merging, the old header is used for the first block, and memcpy is used to make a copy of the header further along memory, allowing us to split the block. 
+
+3. No extra credit was implemented. 128 bytes seems like a good buffer size, since most small requests will be this size.
+
+4. We were unable to get bench to work once we added block merging, as copying memory seemed to created issues with being able to access size...
+
+5. Consulted Brandon's implementation of a linked-list which was helpful for looping through our own lists. 
+
+
+
+
+
+Who was responsible for which part of the project, and how the work was divided.
+A brief description of how your heap (free list) data structure is organized and the algorithms used to manage it.
+A summary of any additional features or improvements in your memory manager or benchmark code. If you did any extra credit parts of the assignment, be sure to describe that. If you experimented with various quantities such as the minimum size of a block fragment to keep on the free list, describe your experiments and results obtained.
+A summary of the results you observed on several runs of your bench program. This does not need to be exhaustive (or exhausting), but it should give the reader an idea of how your code worked, how fast it was, and how efficient it was in its use of memory.
+A summary of any resources you consulted for information about memory management algorithms. Your code, of course, must be your own, but feel free to research and explore memory management topics.

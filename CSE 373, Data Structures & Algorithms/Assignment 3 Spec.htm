@@ -1,0 +1,721 @@
+<html>
+<head>
+<title>CSE 373 Assignment A3</title>
+<link rel="stylesheet" href="../../steves-basic.css" type="text/css">
+</head>
+
+<body class="top">
+
+<div class="header">
+
+  <table>
+   <tr height="25"><td>&nbsp;CSE 373, Autumn, 2014 -- University of Washington</td></tr>
+  </table>
+</div>
+
+<div class="wrapper">
+<img src="hashcolors.png" align="right">
+
+<h1>Assignment A3: Hashing High-Volume Data</h1>
+
+<h2>Overview</h2>
+<p>
+
+In this assignment, we will be developing hashing functions and hashtables for
+an important type of data that is the most voluminous of all
+data in the internet: pixel data.   We will be applying
+our hashing techniques to one of the big technical challenges
+connected with "big data" -- data compression.
+<p>
+
+Data compression is a big subject and there are many techniques,
+including JPEG compression (based largely on spatial frequency
+analysis of images using the discrete cosine transform), and LZW
+encoding to exploit statistical redundancy in a file.
+We will limit our data compression efforts in this assignment
+to the management of color information in images.  
+<p>
+
+Hashing will help us analyze a population of data in an efficient
+way, which in turn will lead us to various choices in how best to
+represent and deliver the color information in an image.
+
+<h2>Part I</h2>
+<p>
+
+ Read this section and prepare your answers to all the questions
+(for example, Q1a, etc.) as a .txt file.
+Turn it in by the Part I due date (Oct. 22 at 5:00 PM) via Catalyst CollectIt.
+
+
+<h3>I.1. Background for the application</h3>
+
+<p>
+
+  A 24-bit color tuple is defined as an element of the set
+   {0, 1, ..., 255}<sup>3</sup>
+  This is the 3-way cartesian product of the set of the first
+    256 natural numbers, with itself.
+  Let us denote this set at C.
+  We sometimes call C the 24-bit color space.
+Examples of elements in C are (0,0,0) and (127,255,15). Some tuples not in C include (0, -1, 0), (255, 255, 256), and (0, 1, 2, 3).
+<p>
+
+ Q1a. Evaluate | C |.  I.e., What is the cardinality of C?
+  This is the same as the question, "how large is the set of 24-bit color tuples?"
+
+<p>
+
+ There is a physical interpretation of a member c=(r,g,b) of 
+this set. The three components, represented here as r, g, and b, specify
+amounts of light in each of three primary colors: red, green, and blue.
+<p>
+
+ The set C of colors offers a fairly complete palette of different colors
+ and modern graphics cards and good LCD monitors can render each of these
+ colors distinctly (or almost distinctly).
+<p>
+
+ Q1b. If we consider elements of C to be 3D points in a cube having diagonally opposite corners
+at (0,0,0) and (255,255,255), then what is the straight-line distance between
+  (255,0,0) and (254, 1, 1) ?  For this, use the Euclidean distance between two n-tuples A and B,
+  denoted
+<br>
+<center>
+  <img src="euclidean-dist-eqn.png">.
+</center>
+<!--  Latex code for this is here.  It can be converted to .png format at
+http://frog.isima.fr/bruno/share/tex2png/
+
+d(A, B) = \sqrt{\sum_{i=0}^{n-1} (A_i - B_i)^2}
+ -->
+<p>
+
+ Q1c.
+
+ However, the human eye doesn't always pick up on the subtle differences
+ among all these colors, and there are many situations in which a
+ smaller set of colors will suffice to render a scene pretty well from
+ a human-perception point of view.  There are a number of reasons to
+ try to work in a smaller color space than C.  For one, there can be
+ storage space savings.  For another, there can be network transmission
+ time savings.   Sometimes, there is even a desire for simplification
+ or exaggeration of image features and that sometimes can go hand-in-hand
+ with color-space reduction.
+
+<p>
+ Certain image formats, such as GIF and PNG allow the representation
+ of an image to use particular subspaces of C.
+
+<p>
+ Suppose, in the interests of economy, all colors that
+ fall within a certain subcube Q are to be represented by the color
+ that lies at its center (or if the center's coordinates have fractional values,
+ we use the floors of those values).  
+     What is the greatest distance between any two colors in Q?
+     (Call this DQMAX and give an expression for DQMAX).
+ Assume Q is given by the two diagonally opposite vertices
+    (x0, y0, z0) and (x0 + d, y0 + d, z0 + d).
+
+<p>
+ Q1d. What is the distance between black and white, where
+    black = (0,0,0) and white = (255, 255, 255) ?  (Call this DMAX).
+
+<p>
+ Q1e. Give an expression, in terms of subcubesize d, for the percentage P
+    of DMAX represented by DQMAX.
+
+    For example, when x0 = y0 = z0 = 0, and d = 255, then P = 100 %.
+
+<p>
+
+<h3>I.2. Hashing functions for colors and blocks.</h3>
+<p>
+
+ Let c = (r, g, b) be an element of C.
+ Define hash function h<sub>1</sub> as follows: 
+   h<sub>1</sub>((r, g, b)) = r ^ g ^ b.  We are using the caret symbol for bitwise exclusive-or.
+Note that the caret in an expression such as P ^ Q denotes the bitwise exclusive-or operation in many modern
+programming languages, including Java, Python, C, and C++.
+To compute the bitwise exclusive-or operation for two integers A and B, express each in binary (base 2),
+line up the bits, and then perform, for each position, the logical operation of exclusive-or, obtaining
+a corresponding bit of the answer C.  For the case A=255 and B=15, we have the following:
+<pre class="mypre">
+variable  decimal     binary                          decimal
+  A =       255  =  1   1   1   1   1   1   1   1
+  B =        15  =  0   0   0   0   1   1   1   1
+-------------------------------------------------
+  C =               1   1   1   1   0   0   0   0   =   240
+</pre>
+<p>
+For the hash function above, here is an example: h<sub>1</sub>((255, 15, 8)) = 248.
+<p>
+
+ Q2a. Compute h<sub>1</sub>((192, 128, 15))
+<p>
+ Q2b. Compute h<sub>1</sub>((255, 254, 253))
+<p>
+ Q2c. Compute h<sub>1</sub>((127, 0, 255))
+<p>
+
+ Q2d. What is the range of h<sub>1</sub>?
+<p>
+  
+
+  Define hash function h<sub>2</sub> as follows:
+<p>
+    h<sub>2</sub>((r, g, b))  = 1024 * r + 32 * g + b
+<p>
+
+ Q2e. Compute h<sub>2</sub>((192, 128, 15))
+<p>
+ Q2f. Compute h<sub>2</sub>((255, 254, 253))
+<p>
+ Q2g. Compute h<sub>2</sub>((127, 0, 255))
+<p>
+
+ Q2h. What is the range of h<sub>2</sub>?
+<p>
+
+ Q2i. If we use a hashtable of size N = 521, and compute hashtable
+   indexes from colors using i = h(c) mod N, then which hash function
+   (h<sub>1</sub> or h<sub>2</sub>) is likely to cause fewer
+   collisions when hashing a list of colors?  (Assume the number of
+   distinct colors in the list is at most N.)
+
+<p>
+
+ Q2j. Why?
+
+
+<h3>I.3.  GIF and PNG palettes.</h3>
+<p>
+ The GIF and PNG formats offer a variety of features for the efficient
+ representation of digital images.  They are both particularly good
+ at representing synthetic image like graphic designs, logos, and
+ images with sharp boundaries and limited numbers of colors.
+
+<p>
+ A typical GIF or PNG image has two essential parts:
+<p>
+   1. a color table with 2<sup>t</sup> entries.
+      Thus, the table size must be a power of 2 with t in the range 1 to 8.
+        Common values of t are 1, 2, 4, and 8.
+      Each entry in the table is a 24-bit color tuple.
+<p>
+
+   2. pixel data consisting of a 2D array of integers in the range {0, 1, ..., 2<sup>t</sup>-1}.
+<p>
+
+ Encoders and Decoders
+
+<p>
+ There are two kinds of software for working with images such as these:
+ encoders and decoders.  A browser typically contains decoders that are
+ used to process a GIF or PNG image and determine the actual color values
+ for all the pixels in the image, so that they can be drawn on the screen.
+ An image editing program contains both decoders and encoders.  The encoders
+ are used to translate the actual pixel data into the format of GIF or PNG as
+ specified.
+
+<p>
+ There are two key steps in encoding:
+<p>
+    1. determining an appropriate color table (called a palette) and
+<p>
+    2. mapping the pixel values from the image into color table entries.
+<p>
+
+ Each of these can be done in many ways.  For example, it could be decided
+  by the author of the encoder that a standard color palette should always
+  be used, even if it is not optimal for the image that is to be encoded.
+  This would speed up the encoding process, for one thing.
+  Alternatively, a careful analysis of the colors in an image could be
+  performed in order build a palette that is representative of the
+  colors in the image.
+<p>
+
+  The mapping of pixel values from the image into the color table can
+  be done easily, if there is actually a color table entry for every
+  color occuring in the image.   If not, then each pixel's value should
+  be mapped to the index of the color in the table that matches it most
+  closely.  
+<p>
+
+  As we will see, hashing can be used in each of these two steps.
+
+  But first, let's do some simple examples of palette construction
+  and encoding of the pixels.
+
+<p>
+  Example 3.1:
+<p>
+
+  We scan the image below starting with the top row, moving left to right.
+  Whenever a new color is found, create a new color table entry.
+
+<pre class="mypre"> 
+   Image as RGB                                      Color table
+
+(255,0,0),     (0,255,255),   (127,127,127),       0: (255,0,0)
+(127,127,127), (0,0,0),       (254,0, 0),          1: (0,255,255)
+(0,255,255),   (255,0,0),     (127,127,127),       2: (127,127,127)
+(0,0,0),       (127,127,127), (0,255,255)          3: (0,0,0)
+                                                   4: (254,0,0)
+</pre> 
+
+<p>
+  Now we encode the pixels of the image using the table:
+<pre class="mypre"> 
+
+   Image as color indices
+0              1              2
+2              3              4
+1              0              2
+3              2              1
+</pre> 
+
+<p>
+ Exercise -- Q3: Build the color table and the image as color indices for the
+following Image as RGB:
+<pre class="mypre"> 
+(100,200,0),   (100,200,0), (50,50,50),
+(128,128,128), (50,50,50),  (100,200,0),
+(255,255,255), (100,200,0), (255,255,255),
+(1,2,3),       (255,254,0), (50,50,50)
+</pre> 
+
+<h3>I.4. The "Popularity algorithm" for color table creation.</h3>
+
+<p>
+This method starts by conceptually dividing the color space C into many
+small blocks of size s by s by s.  Typically s = 4 or s = 8.
+
+<p>
+For a given 24-bit color tuple c= (r,g,b),
+ we can determine which block it belongs in by dividing: <br>
+<img src="blockformula.png" align="center">
+<br>
+<!-- created from the latex:
+block(c) = block((r, g, b)) = (\lfloor r/s \rfloor , \lfloor g/s \rfloor , \lfloor b/s \rfloor ).
+-->
+
+For example, taking s=4,  block((255, 127, 32)) = (63, 31, 8).
+
+<p>
+ Exercise -- Q4a: Compute the blocks for each of the 12 pixels of Exercise Q3.  Assume s = 8 for this exercise.
+
+
+<p>
+We proceed by creating a hash table, H for storing pairs of the
+ form ( B, w ), where B is a block and w is an integer weight.
+
+<p>
+We scan through all the pixels of the source image I and for each pixel p:
+<pre class="mypre">
+    let c = color(p)
+    let B = block(c)
+    if H contains a pair with block B as key,
+       let w = H.get(B)
+       w = w + 1
+       H.put(B, w)
+    else:
+       H.put(B, 1)
+</pre>
+<p>
+By this point, we have a hashtable full of blocks and their counts.
+<p>
+Exercise Q4b. Draw a hashtable with capacity 16.  Using the hash function h<sub>0</sub>((x, y, z)) = x,
+and the linear probing policy for collision resolution, insert each block from your answer to the previous question
+into the hashtable, and associate with each block, its number of occurrences (its count).
+If a block is not in the hashtable, we assume its count is 0.  Your hashtable drawing should consist of a grid with
+16 rows and 3 columns. The first column gives the index of the hashtable position; the second column gives the 
+block itself, and the third column gives the count of occurrences.
+<p>
+Next we make a list L of the blocks and their counts by getting all
+of the pairs out of the hashtable.
+
+<p>
+Now sort L by the weight values, so that the w values are in
+nonincreasing order.  The largest is first.
+
+<p>
+Assuming the palette should have U entries, 
+choose the first U elements of L, and call this L<sub>U</sub>.<br>
+<p>
+
+For each block B in L<sub>U</sub>,
+compute the representative color: the color in the center of the block.
+<br>
+     representative(B) = representative((Br, Bg, Bb)) = (s * Br + s/2,   s * Bg + s/2,   s * Bb + s/2)
+<br>
+
+<p>
+The color table consists of the U representative colors, in an array P.
+<p>
+Exercise Q4c. Let U = 4.  Give the resulting array P, based on your answer to exercise Q4b.
+When you select the U blocks of greatest w values, break ties by taking the blocks closer to the beginning of the hashtable.
+(This is arbitrary and an implementation can break ties in any consistent manner.)
+
+<h3>I.5. Encoding the Pixel Array</h3>
+<p>
+
+To determine the color table indexes to use for each pixel,
+ there are two approaches: slow-and-simple, or fast.
+
+<p>
+Slow-and-simple: For each pixel, find the color table entry that
+ minimizes the (Euclidean) distance between the pixel color and table color.
+ Store the index of that color into the output pixel array.
+<p>
+Exercise Q5a. Determine the 12 index values using the Slow-and-simple method for
+the example from Q4a-c.
+
+<p>
+Fast:  First, create an index that maps each "populated block" to its
+ best representative.   Go through the list L of block-weight pairs.
+<p>
+<pre class="mypre">
+ For each (B, w) pair:
+    Compute its representative color rc as the color of the center of block B.
+    Scan the color table to find the index i of the closest color to rc.
+    In hashtable H, replace the entry (B, w) by (B, i).
+</pre>
+<p>
+Now the hashtable represents a dictionary that maps blocks to color table entries.
+Now that we have this dictionary, we can easily look up what color table index
+to use to encode a pixel p.
+
+<pre class="mypre"> 
+ Scan the source image and for each pixel:
+   Let c be the color of the pixel.
+   Let B = block(c).
+   Let i = H.get(B).
+   Store i in the output array as the color table index for this pixel.
+</pre>
+
+<p>
+Note that the Fast algorithm might not produce exactly the same output
+ array as the Slow simple method, because the distance comparisons are
+ done using block representatives rather than original pixel colors.
+<p>
+Exercise Q5b. Determine the 12 index values using the Fast method for
+the example from Q4a-c.
+
+<h3>I.6. Decoding</h3>
+<p>
+ Decoding is not only part of the encoding-decoding chain, but it is
+also useful to evaluate the quality of the encoding.
+
+<p>
+ Decoding from the representation computed above is straightforward:
+<pre class="mypre">
+ Allocate a new image array (in Java, typically a BufferedImage object).
+ Scan through the indexed color array (output of encoding), looking each
+  index up in the table to get the corresponding color.
+  Store the color information into the new image array.
+</pre>
+<p>
+
+Typically, there will be a loss of information due to the limitation
+on the number of colors allowed in the table.  The loss will be more
+apparent if U is small relative to the number of distinct colors in the image.
+For example, if the image has 9999 distinct colors in it, but U=16, then
+many colors may be substantially "off" in the resulting indexed color version.
+
+
+<h2>Part II: Implementation in Java</h2>
+<p>
+Perform the implementation described below.  Turn in your Java source files
+and README.txt files using Catalyst CollectIt prior to the Part II deadline
+of Wednesday, October 29 at 5:00 PM.  The standard late policy applies.
+
+
+<h3>II.1. Starter Code</h3>
+
+<p>
+Begin with the A3 starter code.  This code is similar in some ways
+to the A1 starter code, but it is tailored to this assignment and there is very little
+user-interfacing left to do. For example, each of the menu items you might need will be
+already created by the starter code.
+Stubs are provided for most of the methods you will need
+to write.
+<p>
+
+The starter code is a stripped-down application with the name "Image Analyzer":
+<a href="ImageAnalyzer.java">Source code</a>.
+You should also download the file
+<a href="CustomHashtable.java">CustomHashtable.java</a>, which is needed for the
+project to compile, but only has to be edited if you choose to implement the extra-credit
+features.
+<p>Two image files are available. They are linked from the test data section, further below.
+
+
+<h3>II.2. New Menu Items</h3>
+<p>
+
+Implement the methods needed for the operations covered in Part I in Java with the following new menu items
+Note: These menu items are created by the starter code.
+
+<pre class="mypre">
+1. Create palette of size 2
+2. Create palette of size 4
+3. Create palette of size 16
+4. Create palette of size 256
+
+5. Encode (Slow and Simple)
+6. Encode (Fast)
+
+7. Decode
+
+8. Set Block Size to 4x4x4
+9. Set Block Size to 8x8x8
+10. Set Block Size to 16x16x16
+
+11. Select Hash Function H1
+12. Select Hash Function H2
+13. Select Hash Function H3
+
+14. Use Java's HashMap class
+15. Use Custom Hashtable class and Linear Probing
+16. Use Custom Hashtable class and Quadratic Probing
+</pre>
+<p>
+Note that 15 and 16 are needed only if you do certain extra credit parts.
+
+
+
+<h3>II.3. Implement 3 hash functions</h3>
+<p>
+
+
+<pre class="mypre">
+H1: map block B = (Br, Bg, Bb) by
+ exclusive or'ing Br, Bg, and Bb together.
+
+H2: second hash function, h2() defined earlier.
+
+H3: map block B by converting B to a string
+  and using Java's string hashcode method.
+ (You may do this in your own way.  Different solutions
+    should end up behaving differently.)
+
+</pre>
+
+
+<h3>II.4. Implement the Popularity Algorithm</h3>
+<p>
+Using the current parameters for block size s and U set by the user via the menu,
+process the current image and build the color table.
+Then encode the pixel array getting an array (2-dimensional) of int values.
+At the end of this step, enable the Decode menu item.
+<p>
+
+Implement decoding.  When the Decode menu option is enabled, the user may
+select it, and this should start your decoding process.
+The process should decode the recently encoded image, so that the user can easily
+evaluate visually what has changed.  
+The starting code includes functionality to
+keep the working image (prior to encoding) available temporarily, so that
+the error caused by encoding and decoding can be computed.  The starter code
+also provides the functionality to compute the error for you.
+After the decoding is complete, the Decode menu item should be set back into
+the disabled state.
+
+<p>
+
+The average per-pixel error value gives an indication of the amount of color
+distortion caused by the data compression.  Add code to
+print out to the console a report on the error.  For example,
+<p>
+"Average per-pixel encoding error= 3.072."
+
+<h3>II.5. Instrument the Code and Report Performance Statistics</h3>
+<p>
+
+
+Reporting of stats:
+Report the following at the end of the color counting step and again at the end
+ of the encoding step.
+<pre class="mypre">
+  which hash function is currently in use.
+     (and if you are using your own Hashtable implementation, 
+      what collision resolution method is currently in use.)
+  number of pixels in the image.
+  number of distinct color bins (i.e., number of distinct keys
+      in the hashtable).
+  capacity of the hashtable.
+  number of key-value pairs in the hashtable.
+  load factor.
+</pre>
+<p>
+Also report:
+<pre class="mypre">
+  Elapsed time in milliseconds to build the table.
+  Elapsed time in milliseconds to encode the pixels.
+  Total elapsed time.
+  Estimated compression ratio, based on the current number of 
+     bits per pixel that would be required when minimizing this
+     (but not using LPW or any other compression), plus the
+     number of bytes required for the table, in comparison to 
+     the number of bytes required for the raw RGB image.
+
+  Average per-pixel encoding error (already mentioned above).
+</pre>
+<p>
+Basic version of the assignment: You may use the Java HashMap class.
+You will be testing how various hash functions perform in terms of collisions and execution time.
+
+
+<h3>II.6. Test Data</h3>
+<p>
+
+Two test images are provided here.  One is the 
+<a href="UW-Campus-1961.jpg">UW-Campus-1961.jpg</a>
+image that should be loaded automatically when your program starts.
+The other is the (very small) image
+<a href="q3Image.png">q3Image.png</a>
+that corresponds to the example you worked by hand in Part I.
+
+
+<h3>II.7. README.txt File</h3>
+
+Create a .txt file named README.txt. In it, include the following.
+<pre class="mypre">
+ Your name and UWNetID
+ 
+ 1. Which extra credit options you implemented, if any.
+
+ 2. Brief explanation of your hash function h3 for blocks and why you think
+    it should do a good job in terms of (a) key scattering and (b) efficiency.
+
+ 3. An answer to the question: "Why does the fast method for encoding run more
+    quickly than the Slow and Simple method?" 
+
+ 4. An answer to the question: "What kind of compression ratio can one
+    expect from indexed color encoding, assuming one is willing to
+    accept a slightly noticeable distortion in the colors of an image?"
+</pre>
+<p>
+Turn in your README.txt file with your source files, via Catalyst CollectIt, before
+the Part II deadline.
+
+
+<h3>II.8. Extra credit options</h3>
+
+
+<p>
+For the extra credit, you'll implement your own custom Hashtable class and collision resolution methods.
+<p>
+
+(Option A3E1) 
+
+  (10 points).
+Implement a hashtable, connecting it into the application via the
+"stub" code commented out in the starter code: class CustomHashtable, etc.
+ 
+Use linear probing for collision resolution.
+When executing operations using your custom hashtable, add the following to the printed statistics
+after palette construction.
+<pre class="mypre">
+  current collision-resolution method.
+  average number of collisions per insertion.
+  maximum number of collisions for any one insertion.
+  average number of collisions per get operation.
+</pre>
+<p>
+Additional details on what to implement can be found in the comments at the top of the file CustomHashtable.java.
+<p>
+
+(Option A3E2) 
+
+(5 points).
+Build on your hashtable implementation by providing an alternative
+collison resolution method: quadratic probing.
+Compare the performance of the two collision-resolution methods by running both collision methods on palette construction for
+the UW-Campus image that comes with the starter code.  In the comparison, use a block size of 16x16x16 and a palette size of 16.
+See the additional details in the comments at the top of the file CustomHashtable.java.
+<p>
+
+(Option A3E3) 
+
+ (5 points).
+
+Research and implement enough of the details of the GIF 87a, GIF 89a, or PNG format so as to be able to
+write out an actual GIF or PNG file that can be read (decoded) by the Firefox browser.
+LPW encoding of the pixel array is not required in the "uncompressed" GIF mode.  Your resulting file
+encoder must use your color-table construction and your pixel-encoding process.
+
+
+
+<h2>Turn-in</h2>
+
+<p>
+
+Turn in your source files through our Catalyst CollectIt
+<a href="https://catalyst.uw.edu/collectit/dropbox/tanimoto/32811">dropbox</a>.
+Part II of this assignment is due Wednesday, October 29 at 5:00 PM.  Late penalties apply (see
+the
+<a href="../../policies.html">policies</a> page for details).
+
+
+<h2>Grading Rubric</h2>
+
+<p>
+In this assignment, you can earn 100 regular points and up to 20 points of
+extra credit.  Part I is worth 30 points, and Part II is worth 75 points.  The extra credit
+options are all related to Part II.
+
+<pre class="mypre">
+Part I. (30)  Q1: 5; Q2: 10; Q3: 5; Q4: 5. Q5: 5.
+
+Part II. (70)
+
+Three hash functions at 5 points each for up to 15 points.
+
+Hashing of blocks correctly counts the numbers of occurrences of
+colors within each block, no matter which hash function is used: 10.
+
+Hashing statistics are correctly printed out: 5.
+
+Popularity algorithm results in the correct palette: 10
+
+Encoding using the slow and simple method works correctly: 5
+
+Encoding using the fast method works correctly: 5
+
+Decoding works correctly: 10
+
+README.txt file submitted with reasonable answers: 5
+
+5 points for writing very clear readable code with clear comments in
+English for each new class, method and function, and static variable.
+Any other variables should have names suggestive of their meaning,
+with comments unless the variable is a loop variable (i.e., int i) or
+a size or length (int n).  JavaDoc format is fine but not required.
+The comments at the top of each file, described earlier, also contribute
+to these points.
+</pre>
+
+<p>
+
+
+<p>
+
+Extra credit: grading will be likely be all or nothing on each of the extra credit options.
+
+
+
+<p>
+&nbsp;
+<br>
+Version 1.0. Last major update Tuesday, Oct. 21, 2014 at 21:29 PM.
+
+</div>
+
+
+
+</body>
+
+
+</html>

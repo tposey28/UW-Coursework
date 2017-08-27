@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+  <title>CSE 414 Homework 5</title>
+<style type="text/css">
+dl dt { font-weight: bold; }
+.style1 {color: #006600}
+.red {
+    color: #F00;
+}
+</style>
+  </head>
+
+  <body>
+    <h1>CSE 414 Homework 5: JSON, NoSQL, CouchBase</h1>
+
+      <h3>Objectives:</h3>
+      To be able to manipulate semistructured data in
+      JSON and practice using a NoSQL database system (CouchBase)
+      <h3>Due date:</h3>
+      Wednesday, May 11, at 11:00 pm.  Turn in your solution using the assignment drop box linked from the main course web page.
+
+
+      <h3>What to turn in:</h3>
+
+      A single file with comments indicating which problem each query answers called <code>hw5-queries.n1ql</code>. <strong>Important</strong>: make sure you can run your submission file all at once by running
+      <pre>cat hw5-queries.n1ql | cbq</pre> This should produce a JSON object for each query result without errors.
+
+      <h3>Assignment Tools:</h3>
+      CouchBase
+      <ol>
+        <li> Download and install Couchbase (enterprise edition) from here <a href="http://www.couchbase.com/nosql-databases/downloads" target="_blank">http://www.couchbase.com/nosql-databases/downloads</a> on your pc. Complete the registration as required, then download and unzip. For more information, go to <a href="http://developer.couchbase.com/documentation/server/4.0/getting-started/installing.html" target="_blank">http://developer.couchbase.com/documentation/server/4.0/getting-started/installing.html</a>.</li></li>
+          <ul>
+            <li>Mac OS/X: after download <b>do not open!</b>.  First copy Couchbase Server to /Applications, <b>then</b> open.  If Mac OS/X refuses to open, could be security settings: systems-preferences/security-and-privacy/allow-apps-downloaded-from=Anywhere.  If you need to re-install it later, delete both the Couchbase program <i>and</i> the directory ~/Library/Application Support/Couchbase.  Add this to your PATH variable via <code>export PATH="$PATH:/Applications/Couchbase Server.app/Contents/Resources/couchbase-core/bin"</code>
+        </li>
+        <li>Windows: Open the executable setup launcher after download.  Follow the instructions to install Couchbase.</li>
+        <li>Linux: Install the package. The server should start automatically. Add to your PATH variable via <code>export PATH="$PATH:/opt/couchbase/bin"</code> </li>
+          </ul>
+        <li>Start the server by opening couchbase (click on the icon). It should start automatically if on Linux. Setup procedure:
+      <ul>
+        <li>Open <a href="http://127.0.0.1:8091/index.html" target="_blank">http://127.0.0.1:8091/index.html</a> (normally your browser will open it automatically when you start the server).</li>
+        <li>Keep all default settings; when asked for sample buckets do whatever you want (let's say you select all of them); complete the registration; choose a password for your Administrator account. Once finished, give it a few seconds to start it's server.</li>
+        <li>Go to "Data buckets" and choose a bucket to delete (say, the "default data bucket"): click on the arrow / edit / delete.  Confirm: yes, delete.  (Why delete? because Couchbase allocates all RAM in the cluster to the existing buckets.  To create a  bucket, we must delete a bucket.)</li>
+        <li>Click on Create New Data Bucket: name = mondial (leave all options default)</li>
+      </ul>
+        <li> Download the Mondial JSON dataset from <a href="hw5.tar.gz" target="_blank">here</a>.  Store the file mondial.json in your work directory for this homework.</li>
+    <li>Upload mondial.json to Couchbase.  From a terminal window type:
+
+<pre>
+cbdocloader -u Administrator -p [your-password]  -n 127.0.0.1:8091 -b mondial -s 100 mondial.json
+</pre> Make sure your PATH variable is correctly (so it can find cbdocloader),  or your admin password is correct, and that the file mondial.json is accessible (cd or type the full path). If you are on a Mac and get an error relating to a snappy-c.h file, you will need to install the <a href="http://google.github.io/snappy/" target="_blank">snappy</a> library. If you have <a href="http://brew.sh/" target="_blank">Homebrew</a>, the command is <code>brew install snappy</code>.
+    </li>
+    <li>Start the query interface.  From a terminal window type:
+
+<pre>
+cbq
+</pre> On Windows: you can find file cbq.exe in C:\Program Files\Couchbase\Server\bin\cbq.exe.  Open this executable file instead.
+
+</li>
+<li>Now you can try your first queries, here are some examples:
+
+<pre>
+select y from mondial x unnest x.mondial.country y where y.name='Greece';
+select y.["-car_code"] as car_code, y.name, ARRAY_LENGTH(y.province) as no_provinces  from mondial x unnest x.mondial.country y where y.name='Greece';
+select y.name, count(y.province) as no_provinces from mondial x unnest x.mondial.country y unnest y.province group by y.name;
+select y.name, y.height from mondial x unnest x.mondial.mountain y;
+</pre>
+
+There is no 'help': to exit, type CTRL/D.  If you get the error message "No primary index on keyspace mondial. Use CREATE PRIMARY INDEX to create one." then you need to create one manually:
+
+<pre>
+CREATE PRIMARY INDEX mondial_primary ON mondial USING GSI;
+</pre>
+
+mondial.json is small enough that you can browse it with a text editor to explore it structure.
+
+      </ol>
+
+      <h3>More Resources:</h3>
+      <ul>
+    <li>CouchBase Tutorials: <a href="http://developer.couchbase.com/documentation/server/4.0/getting-started/first-n1ql-query.html" target="_blank">http://developer.couchbase.com/documentation/server/4.0/getting-started/first-n1ql-query.html</a></li>
+    <li>CheatSheet <a href="http://docs.couchbase.com/files/Couchbase-N1QL-CheatSheet.pdf" target="_blank">http://docs.couchbase.com/files/Couchbase-N1QL-CheatSheet.pdf</a></li>
+      </ul>
+
+      <h3>Problems (2 points each):</h3>
+      <ol>
+    <li>
+      <!-- Problem 1-->
+      Retrieve all the names of all cities located in Peru, sorted alphabetically.
+      <br><em> [Result Size: 30 rows] </em>
+    </li><br>
+    <li>
+      <!-- Problem 2 -->
+      For each country return its name, its population, and the number of religions, sorted alphabetically by country. We are flexible about how you handle countries without the religion attribute, but try to include countries that don't have it. For this, you will need the ARRAY_LENGTH function.
+      <br><em> [Result Size: 238 rows] </em>
+    </li><br>
+    <li>
+      <!-- Problem 3 -->
+      For each country that has provinces return its name, the number of provinces, and the number of cities, sorted alphabetically by country.  Notice that for countries that have provinces all cities are listed inside the provinces.
+      <br><em> [Result Size: 59 rows] </em>
+    </li><br>
+    <li>
+      <!-- Problem 4-->
+      Find all countries with 20 provinces or more. Return the country name and the number of provinces. Order descending by the number of provinces and then ascending by the country name.
+      <br><em> [Result Size: 26 rows] </em>
+    </li><br>
+
+    <li>
+      <!-- Problem 5-->
+      For each province(state) in the United States, compute the ratio of its population to area, and return each province's name, its computed ratio, and order them descending by the ratio.  You need the function TONUMBER(...) to convert a string to a number.
+      <br><em> [Result Size: 51 rows] </em>
+    </li><br>
+    <li>
+      <!-- Problem 6 -->
+      For each country return its name and the number of mountains in that country, sorted alphabetically by country.  Notice that here you need to join the country collection with the mountain collection.
+      <br><em> [Result Size: 43 rows or 84 rows (depending on how you write the query)] </em>
+    </li><br>
+
+    <li>
+      <!-- Problem 7 -->
+      For each country return its name and the names and heights of all mountains over 2000m high. Return objects of the form country name, mountain name, mountain height where the country name is repeated for each of its mountains. Sort your results by country name and then mountain name. Note: the height attribute is in meters, so you don't have to do any conversions.
+      <br><em> [Result Size: 149 rows or 168 rows (depending on how you write the query)] </em>
+    </li><br>
+
+    <li>
+      <!-- Problem 8 (old problem 8)-->
+      For each river which crosses two more more countries, return its name, and the full names (not country code) of the countries that it crosses. Return objects of the form rive name, country name where the river name is repeated for each country it crosses. Sort your answers by the river name and then country name(s). Hint: all rivers that cross two more more countries have a 'located' collection, but some rivers that cross only one country also have a 'located' collection.
+      <br><em> [Result Size: 144 rows] </em>
+    </li><br>
+    <li>
+    <strong>Extra Credit (4 points)</strong>: In a separate file called <code>hw5-extracredit.n1ql</code>, write a query using the NEST operator that answers question 7 but returns a list of mountain names and mountain heights for each country name. Do not do it using ARRAY_AGG. The staff isn't even sure how to do this. 
+    </li>
+      </ol>
+      <hr/>
+  </body>
+</html>

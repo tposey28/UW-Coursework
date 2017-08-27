@@ -1,0 +1,11 @@
+Taylor Posey
+CSE 374, Brandon Myers
+Homework 3, Problem 4
+
+1. First the horizontal axis label is set, then the vertical label. Next, the
+range of values for the horizontal axis is set. The output file is specified,
+and then our "results.txt" file is used to plot data onto the graph.
+
+2. The three largest websites are in the top 5 or so, but other than that, there
+is not a clear trend. This doesn't surprise me. Just because a website has a 
+lot of content doesn't mean it's neccesarily a popular website.

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+ "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>CSE 414 Homework 2</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+dl dt { font-weight: bold; }
+.style1 {
+	color: #006600;
+	font-family: "Courier New", Courier, monospace;
+}
+.red {
+	color: #F00;
+}
+</style>
+
+<body>
+<h1>CSE 414 Homework 2: SQL (basic)</h1>
+<dl>
+  <dt>&nbsp;</dt>
+<dt>Objectives:</dt>
+  <dd>To create and import databases and to practice simple SQL queries.</dd>
+
+  <dt>Assignment tools:</dt>
+  <dd><code>sqlite3</code>, <a href="http://www.cs.washington.edu/education/courses/cse344/flights-small.tar.gz">Flights dataset (.tar.gz archive)</a>
+  <br>(Reminder: To extract the content of a tar file, try the following command: <span class="style1">tar zxvf flights-small.tar.gz</span>) </dd>
+
+  <dt>Due date:</dt>
+  <dd>Tuesday, April 12 by 11:00pm. Turn in your solution using the assignment drop box linked from the main course web page.</dd>
+
+  <dt>What to turn in:</dt>
+  <dd><code>create-tables.sql</code> and <code>hw2-queries.sql</code> (see below)</dd>
+</dl>
+<p>
+  In this homework, you will write several SQL queries on a relational
+  flights database. The data in this database is from
+  the <a href="http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time">Bureau of Transportation Statistics</a>
+
+  The database consists of four tables:</p>
+<blockquote><p>
+
+	<b>FLIGHTS</b> (fid, year, month_id, day_of_month, day_of_week_id, carrier_id, flight_num, origin_city, origin_state, dest_city, dest_state, departure_delay, taxi_out, arrival_delay, canceled, actual_time, distance)<br>
+	<b>CARRIERS</b> (cid, name)<br>
+	<b>MONTHS</b> (mid, month)<br>
+	<b>WEEKDAYS</b> (did, day_of_week)<br>
+
+  <br>We leave it up to you to decide on the types to use for the various fields.
+
+  <br><br>In addition, impose the following constraints:<br>
+  <ul>
+  <li>The primary key of the FLIGHTS table is fid.
+  <li>The primary keys for the other tables are cid, mid, and did respectively.
+  <li>Flights.carrier_id references Carrier.cid
+  <li>Flights.month_id references Months.mid
+  <li>Flights.day_of_week_id references Weekdays.did
+  </ul>
+
+</blockquote>
+
+<p>
+We provide the flights database as a set of plain-text data files
+in the linked .tar.gz archive.
+Each file in this archive contains all the rows
+for the named table, one row per line.
+
+<p>
+In this homework, you need to do two things: (A) import the flights dataset into
+SQLite and (B) run SQL queries to answer a set of questions about the data.
+
+<h4>A. IMPORTING THE FLIGHTS DATABASE (5 points):</h4>
+<p>
+To import the flights database into SQLite, you will need to run <code>sqlite3</code>
+with a new database file: for example &quot;<strong>sqlite3 hw2.db</strong>&quot;.  Then you can use the <code>CREATE TABLE</code>
+SQL statement to create the tables, choosing appropriate types for each
+column and specifying all key constraints as described above:
+<pre>
+  CREATE TABLE table_name (  . . . );
+</pre>
+<p>Currently, SQLite does not enforce foreign keys by default. To enable foreign keys use the following command. The command will have no effect if your version of SQLite was not compiled with foreign keys enabled. Do not worry about it.
+<pre>
+  PRAGMA foreign_keys=ON;
+</pre>
+
+<p>Then, you can use the SQLite <code>.import</code> command to read data from
+  each text file into its table:
+
+<pre>
+  .import filename tablename
+</pre>
+<p>See examples of .<tt>import</tt> statements in the lecture notes, and also look at the SQLite documentation or <code>sqlite3</code>'s <code>.help</code> for details.
+
+<p>
+Put all the code for part A (four <tt>create table</tt> statements and four .<tt>import</tt> statements) into a file called <code>create-tables.sql</code> .
+
+
+<h4>B. SQL QUERIES (15 points):</h4>
+
+<p><strong><em>HINT: You should be able to answer all the questions below with SQL queries that do NOT contain any subqueries!
+
+</em></strong>
+<p>For each question below, write a single SQL query to answer that question.
+  Put your queries in a file called <code>hw2-queries.sql</code>. Add a comment to each query indicating the question it answers and the number of rows in the query result.
+
+<p><strong>Important: </strong> The predicates in your queries should correspond to the English descriptions. For example, if a question asks you to find flights by Alaska Airlines Inc., the query should include a predicate that checks for that specific name as opposed to checking for the matching carrier ID. Same for predicates over months, weekdays, etc.
+
+<p>If a query uses a GROUP BY clause, make sure that all attributes in your SELECT clause for that query are either
+grouping keys or aggregate values. SQLite will let you select other attributes but that is wrong. Other database
+systems would reject the query in that case.
+
+<ol>
+<li>
+	<p>List the distinct flight numbers of all flights from Seattle to Boston by Alaska Airlines Inc. on Mondays. Also notice that, in the database, the city names include the state. So Seattle appears as Seattle WA.</p>
+	<em> [Output relation cardinality: 3 rows] </em>
+
+<li>
+	<p> Find all flights from Seattle to Boston on July 15th 2015. Search only for itineraries that have one stop. Both legs of the flight must have occurred on the same day and must be with the same carrier.
+  The total flight time (actual_time) of the entire itinerary should be less than 7 hours (but notice that actual_time is in minutes). For each itinerary, the query should return the name of the carrier, the first flight number, the origin and destination of that first flight, the flight time, the second flight number, the origin and destination of the second flight,  the second flight time, and finally the total flight time.
+	<p>Put the first 20 rows of your result right after your query as a comment.</p>
+	<em> [Output relation cardinality: 488 rows] </em>
+
+<li>
+	<p>Find the day of the week with the longest average arrival delay. Return the name of the day and the average delay.</p>
+	<em> [Output relation cardinality: 1 row] </em>
+
+<li>
+	<p> Find the names of all airlines that ever flew more than 1000 flights in one day. Return only the names. Do not return any duplicates.</p>
+	<em> [Output relation cardinality: 11 rows] </em>
+
+<li>
+	<p> Find all airlines that had more than 0.5 percent of their flights out of Seattle be canceled. Return the name of the airline and the percentage of canceled flight out of Seattle. Order the results by the percentage of canceled flights in ascending order.</p>
+	<em> [Output relation cardinality: 6 rows] </em>
+
+</ol>
+Put all your code for part B (<code>SELECT-FROM-WHERE</code> code) in a file called<code> hw2-queries.sql</code>.
+
+
+<p>Save all files you create during this homework: you will need them in later homeworks.

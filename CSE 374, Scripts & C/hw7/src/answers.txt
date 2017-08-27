@@ -1,0 +1,26 @@
+Taylor Posey
+Homework #7
+03/12/2015
+CSE 374 Brandan Myers
+
+1. Both get_move and symbol are set to 0, thus making them essentially NULL since
+they don't have pointers to anything. Score is actually defined in the Character
+class, on the otherhand.
+
+2. Each character in the game is asked for their move on each turn. Monster, 
+BabyMonster, and Player are all extensions of the Character class, so when the 
+specified character has get_move_logged() called, the next call is to the 
+subclass specific get_move() method. All moves are stored in a log as well.
+
+3. Since the const keyword makes it so you can't edit instances, having a const 
+get_move() would forbid us from changing data in an instance. This would make 
+behavior like BabyMonster's impossible, since we wouldn't be able to change 
+_move.
+
+4. The log object is created in each character and all derived sublcasses to keep
+track of previous moves. Thus, the log needs to be destructed explicitly in
+~Character.
+
+5. BabyMonster inherited ~Character, which destructs the only object created when
+a BabyMonster is created (the log). Thus, no other destructor besides this and 
+the implicit destructor is needed.

@@ -1,0 +1,308 @@
+<html>
+<head>
+<title>CSE 373 Assignment A5</title>
+<link rel="stylesheet" href="../../steves-basic.css" type="text/css">
+</head>
+
+<body class="top">
+
+<div class="header">
+
+  <table>
+   <tr height="25"><td>&nbsp;CSE 373, Autumn, 2014 -- University of Washington</td></tr>
+  </table>
+</div>
+
+<div class="wrapper">
+<img src="TOHGraph4.png" align="right" width="250" height="220">
+
+<h1>Assignment A5: Searching Implicit Graphs</h1>
+
+<h2>Overview</h2>
+
+<p>
+Graphs are often presented explicitly in courses on data structures
+and algorithms.  For example, the undirected graph G = (V, E), where
+V = {v<sub>0</sub>, v<sub>1</sub>, v<sub>2</sub>} and
+E = {(v<sub>0</sub>, v<sub>1</sub>), (v<sub>1</sub>, v<sub>2</sub>)}
+is presented with an expression that gives each vertex and edge 
+its own representation.
+In real applications, it is often the case that a graph is presented
+only implicitly; its vertices and edges have to be constructed by code
+as an algorithm runs.  In this assignment, you'll work with 
+one family of such implicit graphs.
+<p>
+
+A <i>problem-space graph</i> is an implicit graph whose 
+vertices represent "states" corresponding to possible situations that
+can be reached in the course of solving a problem.  The edges represent
+possible transitions from one state to another according to a set of
+"operators."
+
+Such a graph is typically given by providing a start vertex 
+v<sub>0</sub> (corresponding
+to the problem's  "initial state," s<sub>0</sub>)
+ together with a set of operators { &#x3d5;<sub>0</sub>, &#x3d5;<sub>1</sub>, ..., &#x3d5;<sub>m-1</sub>}.
+Each operator  &#x3d5;<sub>i</sub> consists of two parts:
+<br>
+<b>precondition<sub>i</sub>:</b> a predicate that takes a vertex as its argument
+and returns true iff and only if it is permissable to apply
+this operator's transition function to the vertex.
+<br>
+<b>transition<sub>i</sub>:</b> a function that takes a vertex as its argument
+and returns a new vertex. The old and new vertices (call them v<sub>x</sub> and
+v<sub>y</sub>) represent an edge of the graph. 
+
+<p>
+Typical tasks associated with problem-space graphs are (a) solving the problem,
+(b) exploring all or a portion of the space by "visiting" all or some of
+its vertices, (c) finding shortest paths between given pairs of vertices,
+(d) measuring properties of the graph such as average degree of a vertex,
+(e) finding the diameter (length of a longest shortest path between two
+of its vertices), and (f) building a visual display of the graph.
+<p>
+
+The basic functionality that you'll provide in this assignment will handle 
+the finding of shortest paths, using breadth-first search (BFS).
+This can be used, in principle, to solve problems as well.
+In addition to breadth-first search, you'll implement one or more additional algorithms that
+will serve to compare BFS to alternatives.
+
+<p>
+We'll work with a problem space based on a popular puzzle, but we won't stop there.
+We'll consider a couple of "extentions" to the puzzle that will make this assignment
+not just an exercise but also more of an exploration in its own right.
+The puzzle is really a family of puzzles.  Known as the Towers of Hanoi, it
+involves three pegs and a set of disks of different sizes.  The player (solver) of
+the puzzle starts with all the disks on the first peg, the disks being arranges with
+the largest-diameter one at the bottom and sizes decreasing going up the stack.
+The objective is to move all the disks to the third peg, respecting the following
+constraints: only one disk may be moved at a time.  Only a disk top-most in its
+stack of disks may be moved.  It must then be moved either to a peg containing
+no disks or to a peg where the topmost disk is of a larger diameter than its own.
+The reason this is a family of puzzles rather than a single one is because
+the number of disks involved is a parameter to the initialization of the puzzle.
+For example, an instance of the puzzle with 5 disks is a little more difficult to solve
+than one with only 4 disks.  An instance having 100 disks, while solvable in theory,
+is impossible in practice, assuming it takes at least one femtosecond to make a move.
+
+
+<p>
+Our graph is defined implicitly as follows.  The starting vertex v<sub>0</sub> 
+represents the initial state of the puzzle.  We have six operators:
+{ &#x3d5;<sub>0,1</sub>, &#x3d5;<sub>0,2</sub>,  &#x3d5;<sub>1,0</sub>, &#x3d5;<sub>1,2</sub>,  &#x3d5;<sub>2,0</sub>, &#x3d5;<sub>2,1</sub>}.
+Here, operator  &#x3d5;<sub>i,j</sub> could be interpreted as "Try to move a disk from peg i to peg j."
+We are using 0-based indexing for the pegs so peg 0 is the first peg, etc.
+
+<p>
+Depending upon whether you choose Java or Python as your implementation language,
+the representation you use for the vertices of the graph will be slightly different.
+These details are given below.
+
+
+<h2>Language Choice
+</h2>
+<p>
+You may use either Java or Python for this assignment.  If you select Python, use version 3.4
+from <a href="http://www.python.org">Python.org</a>.
+
+<p>
+If you use Python, we provide
+<a href="TOHGraphSearch.py.txt">starter code</a>
+ that includes basic definitions for the classes, similar to those in the Java version.
+
+
+Your main program file should be called TOHGraphSearch.py.
+
+<p>
+If you use Java, we provide a 
+<a href="ExploredGraphJ7.java">Java 7 version</a>
+ of the starter code (that will also work with Java 8)
+and a Java 8 (only) 
+<a href="ExploredGraph.java">version</a>.  They both
+ include basic definitions for the classes
+and give, for the Vertex class,
+a constructor that accepts a string of the form below.
+<pre class="mypre">
+Vertex v0 = new Vertex( "[[4,3,2,1],[],[]]" );
+</pre>
+<p>
+Your main program file should be called either ExploredGraphJ7.java or ExploredGraph.java,
+depending on which version of the starter code you wish to use.
+
+
+<h2>Partnership Option
+</h2>
+<p>
+
+You are encouraged to find and work with a partner in this assignment.
+If you work with a partner, you will be able to split the work, possibly do more of the extra credit options,
+and gain partnership experience.
+If you work alone, on the other hand, coordination is simpler, and you get to do all of the 
+analysis of the assignment and 
+implementation
+yourself.
+If you work in a partnership, you will be asked to explain how you divided up the work of the
+assignment.  Normally, partners will receive the same score in the assignment. However, in some unusual cases,
+the scores could be different.
+
+<h2>Basic Code Specification
+</h2>
+<p>
+
+Implement the following classes and methods:
+<ul>
+<li>Vertex: a class to represent vertices of the graph.  Since each vertex represents a state of
+a Towers-of-Hanoi puzzle, it must contain the basic information about which disk is on which peg.
+It should have a <b>toString()</b> method that returns a string of the form "[[4,3,2,1],[],[]]".
+If you use Java, the starter code includes one constructor and the toString method.
+If you use Python, these methods are very easy to write.
+
+<li>Edge: a class to represent edges of the graph.  Provide a constructor, a toString method, and
+methods to retrieve endpoint1 and endpoint2 of the edge.  If you do the extra credit A1E2, also provide
+methods setEdgeCost(int c) and getEdgeCost().
+
+<li>Operator: a class to represent operators for the problem.
+There should be methods to construct operators, access their components, and apply their components.
+<b>getPrecondition()</b> should return a function that can be applied to a vertex to find out whether
+the operator's transition function is applicable to the vertex.
+<b>getTransition()</b> should return a function that can be applied to a vertex (provided that
+the precondition is true) to get a "successor" vertex -- the result of making the move.
+<b>toString()</b> should return a string that describes this operator, clearly differentiating
+it from the others.
+
+<li>ExploredGraph: a class that holds a collection of vertices and a collection of edges.
+It will be used to store the portion of the problem-space graph that has been made explicit
+by the program so far.  It should have the following methods.
+<b>initialize(v)</b> should set up an instance of this class, and insert the starting vertex v
+into its set of vertices. Typically, v will be the start vertex, but your method should allow
+any legal vertex for the problem-space graph. [Optional alternative added Nov. 24 for consistency
+with starter code: <i>initialize()</i>, which should set to empty the explored graph's sets of
+vertices and edges.  The autograding software will accept either of these signatures.]
+<b>nvertices()</b> should return an int giving the number of vertices currently in the explored graph
+structure.
+<b>nedges()</b> should return an int giving the number of edges currently in the explored graph structure.
+<b>bfs(vi, vj)</b> should run a breadth-first search starting at vi and continue until reaching vj.
+<b>dfs(vi, vj)</b> should run a depth-first search starting at vi and stopping either when reaching vj
+or running out of options or resources.  
+<b>retrievePath(vj)</b> should use the path links established by the most recent call to bfs or
+other search method, and it should return the path to vj.  The path should end at vj, and that might
+require reversing the list of vertices obtained by the backtrace.
+<b>shortestPath(vi, vj)</b> should use bfs and return a list of vertices that starts with
+vi and ends with vj representing a shortest path in the problem-space graph from vi to vj.
+This can be implemented using a combination of bfs and retrievePath.
+
+
+</ul>
+
+
+
+<h2>Extra credit options</h2>
+
+<p>
+
+Each of the following options can earn you some extra credit. 
+However, do not attempt the extra credit features until you have the basic features
+working correctly.
+ If you have implemented
+any of the extra credit features, 
+add another comment line near the top of your main source
+file explaining
+which ones you finished.  For example: "* We completed Options A5E1 and A5E2."
+<p>
+
+(Option A5E1) 10 points.  The standard Towers of Hanoi puzzles always use three pegs.
+ Allow the number of pegs in the problem to be greater than 3. This
+should be done 
+ by introducing
+a new Vertex constructor that can handle a more general kind of state expression.
+For example, instead of just handling [[4,3,2,1],[],[]], it could also handle
+[[4,3,2,1],[],[],[]] or even [[2,1],[5,3],[],[],[6,4]].
+Then you will need to create the set of operators so that there are npegs*(npegs-1)
+different operators.  So when npegs = 4, there should be 12 operators.
+
+<p> 
+
+(Option A5E2) 10 points.
+Turn the problem-space graph into a weighted graph using the following criteria.
+The disks are already numbered 1, 2, 3, 4, etc.  If an edge represents moving a disk number k
+from peg i to peg j,
+then make the cost of that edge be a function of three variables: i, j, and k.
+Implement a choice function <b>useEdgeCostFunction(m)</b> where m selects one of
+the following cost functions:
+<ol>
+<li>edgeCost(i, j, k) = 1.
+<li>edgeCost(i, j, k) = k.
+<li>edgeCost(i, j, k) = k<sup>2</sup>.
+<li>edgeCost(i, j, k) = 2<sup>k</sup>.
+<li>edgeCost(i, j, k) = p 2<sup>k</sup>, where p = 0.1 if j=1 and p = 1, otherwise.
+ (This cost function is supposed to encourage moving disks to the middle peg.)
+<li>edgeCost(i, j, k) = ?  (make up your own function here, to try to force the shortest solution path
+to be strange.)
+</ol>
+<p>
+Your shortest-path method should then use the weighted distances when performing
+its computation.  You should use Dijkstra's method here.
+
+<p> 
+(Option A5E3) 5 points.
+Do this option only if you have completed A1E2.
+Instead of using Dijkstra's algorithm to find a shortest path from vi to vj,
+implement A* search, which is a well-known method for efficiently finding a path in a problem-space
+graph from a starting vertex to a goal vertex.  You will need to design a "heuristic" function
+as part of this option.  If you are working on this, we'll have a discussion in GoPost on how this
+can be done.
+
+<p> 
+(Option A5E4) 5 points.
+Using your choice of graphics package, plotting method, or GUI tools, find a way to
+display a graphical representation of (a) the explored graph created by your programs, and
+(b) the most recently retrieved path.  The illustration at the top-right corner of this page
+shows roughly what such a display might look like, for the graph display.
+If you are using Python, you could use Tkinter graphics.  If you are using Java, you could
+use Swing and a JPanel object to draw on.  You could also write your display method in 
+some other language and output your graph as a file that is then read by the display program.
+If you do this option, turn in the additional code (if separate), and a screen shot of one of your
+dislayed graphs.
+
+<h2>Lead TAs</h2>
+<p>
+Andrea Kahn is serving as lead TA for those using Python in this assignment.
+CJ Liu is serving as lead TA for those using Java in this assignment.
+
+
+<h2>Turn-in</h2>
+
+<p>
+
+Turn in your source files through our Catalyst CollectIt
+<a href="https://catalyst.uw.edu/collectit/dropbox/tanimoto/32811">dropbox</a>.
+This assignment is due Wednesday, November 26 at 5:00 PM.  Late penalties apply (see
+the
+<a href="../../policies.html">policies</a> page for details).
+
+<p>[Update of Nov. 24:] If you are in a partnership, the "partnership representative" must
+turn in your source files, but both partners must post comments in CollectIt.  The partnership
+representative is that partner whose last name comes earlier in the alphabetical ordering
+of names.  The comments you post will include answers to several questions.  These questions
+are available in Catalyst CollectIt, as part of the Assignment 5 turn-in instructions there.
+For details on how lateness will be handled and how to use late day credits on A5, see
+the GoPost item 
+<a href="https://catalyst.uw.edu/gopost/conversation/tanimoto/892563/post/3046370#3046370">here</a>.
+
+
+<p>
+&nbsp;
+<br>
+Version 0.7. Last major update Monday, Nov. 17 at noon.
+Minor update regarding Java 8, made Nov. 17 at 22:47.  Python starter code added Nov. 18 at 15:40
+Java 7 version of starter code provided at 23:59, Nov. 19. Extra option for the signature of
+initialize() added, and more turn-in details added Nov. 24.
+</div>
+
+
+
+</body>
+
+
+</html>

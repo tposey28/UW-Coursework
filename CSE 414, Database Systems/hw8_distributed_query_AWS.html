@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+
+<head>
+<title>CSE 344 - Homework 8</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="hw6.css">
+<style type="text/css">
+li{
+  margin: 10px 0;
+}
+</style>
+</head>
+
+<body>
+<h1>CSE 344 Homework 8: Distributed Query Processing</h1>
+<dl>
+<dt>Objectives:</dt>
+  <dd>To create a <a href="http://spark.apache.org/">Spark</a> cluster on <a href="https://aws.amazon.com/">Amazon AWS</a> and use it to run some queries.</dd>
+<dt>Due date:</dt>
+  <dd>Sunday, June 5, 2016 by 11:00pm.</dd>
+<dt>What to turn in:</dt>
+  <dd><code>hw8-queries.sql</code> (with result tuples as comments) and <code>hw8-histogram.pdf</code></dd>
+</dl>
+
+<h2>Homework Description</h2>
+<strong>IMPORTANT:</strong> this setup takes 3 to 5 hours. Start early!
+<p>As we discussed in class, we live in a "big data" era. Our society is generating data at an unprecedented scale and rate. In fact, we are generating so much data that we are unable to take advantage of most of it. This is quite unfortunate.</p>
+<p>In this homework, you are going to be using Amazon AWS to create a Spark cluster and investigate <a href="http://www.freebase.com/">Freebase</a> data. Freebase is a knowledge graph, like Wikiepdia, holding topics and facts about the world. Although the public facing version of Freebase is no longer supported, Google still uses the data.</p>
+<p>Luckily for us, Amazon has provided a public dump of Freebase topics and facts. If you want more information about how Freebase data is organized, go to <a href="https://developers.google.com/freebase/guide/basic_concepts">https://developers.google.com/freebase/guide/basic_concepts</a>.</p>
+<p>At a high level, the data is represented in triples of the form
+<pre>   subject  predicate  object  [context] </pre>
+The subject is usually a topic id that is a unique id that looks like /m/#### (the #### represents some number of alphanumeric characters). The predicate explains what the object is in relation to the subject</p>
+<p>For example, if you issued a query to retrieve all tuples with the subject of mid /m/0284r5q, you would see the following
+<pre>
+subject     predicate                       obj               context
+___________________________________________________________________________________________
+/m/0284r5q  /type/object/key                /wikipedia/en_id  9,327,603
+/m/0284r5q  /type/object/key                /wikipedia/en     Flyte_$0028chocolate_bar$0029
+/m/0284r5q  /type/object/type               /common/topic 
+/m/0284r5q  /type/object/type               /food/candy_bar
+/m/0284r5q  /food/candy_bar/manufacturer    /m/01kh5q 
+/m/0284r5q  /food/candy_bar/sold_in         /m/09c7w0
+/m/0284r5q  /type/object/name               /lang/en          Flyte
+/m/0284r5q  /common/topic/image             /m/04v6jtv
+...
+</pre>
+</p>
+<p>The two /type/object/type predicates indicate that 2 types of mid /m/0284r5q are the type topic and the type candy bar. You can see for the predicate /type/object/name, the object is the English language and the context is Flyte. This means that mid /m/0284r5q is the candy bar called Flyte in English.</p> 
+<p>This is just a subset of the data for a specific topic id. In this homework, you will be looking at data for all topics in Freebase. This dataset is 35 GB, which is why we need Amazon AWS to help. As a comparison, the flights data you used in assignment 2 was 0.11 GB.</p> 
+
+<h2>Setup Your Account and Cluster</h2>
+<ol>
+<li>If you do not already have an Amazon account, go to <a href="http://aws.amazon.com/">http://aws.amazon.com/</a> and sign up. Note: Amazon will ask you for your credit card information during the setup process. This is normal.</li>
+<li>To get mondey to use Amazon AWS, you must apply for credits by going to <a href=" https://aws.amazon.com/education/awseducate/apply/"> https://aws.amazon.com/education/awseducate/apply/</a>. <strong>IMPORTANT:</strong>  You must use your UW email address, your_uwid@uw.edu, when registering for the credits.</li>
+
+<li>After applying, you will have to wait to be approved. You should get an email when your application has been approved, which gives you a credit code. Once you have it, go to <a href="http://aws.amazon.com/awscredits/">http://aws.amazon.com/awscredits/</a> and apply the credit.
+<br><strong>IMPORTANT:</strong> if you exceed that amount, Amazon will charge your credit card without warning. You must remember to <em>manually</em> terminate the AWS clusters when you are done. This credit should be more than enough for this homework assignment, but you should still monitor your billing usage by going to <a href="https://console.aws.amazon.com/billing/home">https://console.aws.amazon.com/billing/home</a>, clicking on "Bill Details" (upper left), and then clicking on "Expand All". If you are interested in Amazon's changes, see <a href="http://aws.amazon.com/elasticmapreduce/pricing/">AWS charges</a>.</li>
+<li> With credit applied, follow <a href="hw8-awsusage.html">these instructions</a> to setup the cluster. Although it may take a long while to go through all these instructions, they are worth it. You are learning how to use the Amazon cloud!</li>
+</ol>
+
+<h2>Running Spark Queries (20 pts)</h2>
+<p> Now that you have set up your Zeppelin Notebook and cluster, you are ready to run queries on the data. For each question below, write your query in a file called <code>hw8-queries.sql</code> with a comment indicating the question number. Then, copy your query into the Zeppelin notebook, run it on Spark, and copy the result into the <code>hw8-queries.sql</code> file as a comment under the query.</p>
+<p>For example,
+<pre>
+--Question number 1
+SELECT...
+FROM...
+WHERE...
+/*
+Answer to query
+*/
+</pre>
+</p>
+<ol>
+<li>What is the total number of RDF rows in the data? (2 pts)</li>
+<li>What is the number of distinct predicates in the data? (2 pts)</li>
+<li>In the example in the description, we showed some tuples with the subject of mid /m/0284r5q. What are all the tuples with the subject of mid /m/0284r5q? (3 pts)</li>
+<li>How many travel destinations does Freebase have? To do this, we'll use the type /travel/travel_destination. In particular, we want to find the number of subjects that have a /type/object/type predicate with the object equal to /travel/travel_destination. (3 pts)</li>
+<li>Building off the previous query, what 20 travel destination have the most tourist attractions? Return the location name and count. Use the /travel/travel_destination/tourist_attractions predicate to find the tourist attractions for each destination. Use the /type/object/name predicate and /lang/en object to get the name of each location (the name will be the context of the tuple with predicate /type/object/name and object /lang/en). Sort your result by the number of tourist attractions from largest to smallest and then on the destination name alphabetically and only return the top 20. (4 pts)</li>
+<li>Generate a histogram of the number of distinct predicates per subject? This is more than a count of the number of distinct predicates per subject. This is asking for computing a distribution of the number of distinct predicates. For your answer, still put the query in <code>hw8-queries.sql</code>, but instead of copying the result as a comment, make a chart of your results in Zeppelin (the little icons below the query allow you to toggle output modes). Take a screenshot of a barchart of your histogram and submit it as <code>hw8-histogram.pdf/jpg/png</code> (6 pts)</li>
+</ol>
+
+<h2>Multiple Choice (8 pts)</h2>
+<p> You do not need any cluster to answer the following multiple choice questions. For each question, choose only one answer.</p>
+<ol>
+<li> In the setup code, you ran the command <pre>hadoop fs -put /data/freebase-datadump-quadruples.tsv /data/spark_data.tsv</pre> to put data in HDFS for Spark to read. By default, Spark looks in HDFS for data, but you can actually tell Spark to read files locally, rather than from HDFS. For this to work, what additional preprocessing step would I need to take before even opening my Zeppelin notebook to prepare the data?
+  <ol type="a">
+  <li>Transferring the file to the /tmp/ directory for Spark to access.</li>
+  <li>Format the data to be in RDD format.</li>
+  <li>Replicate the data to be on all the nodes in the cluster.</li>
+  <li>Move the data into memory so it can be read by Spark.</li>
+  </ol>
+</li>
+<li> How is Spark different from Hadoop MapReduce?
+  <ol type="a">
+  <li>Spark can read data that is compressed while Hadoop MapReduce cannot.</li>
+  <li>Spark writes intermediate results (after Map-Reduce phases) to memory while Hadoop writes to disk.</li>
+  <li>While computing map(f), if a single call to f(x) runs  out of memory, then Spark will throw an OutOfMemory error while Hadoop will successfully finish.</li>
+  <li>Spark can run Machine Learning algorithms while Hadoop cannot.</li>
+  </ol>
+</li>
+<li> Which of the following is NOT a good use case of Map-Reduce?
+  <ol type="a">
+  <li>Counting the number of times each word occurs in a massive collection of documents.</li>
+  <li>Running a large number of transactions for a major  bank.</li>
+  <li>Computing matrix multiplication on two massive matrices.</li>
+  <li>Returning files that contain a certain word in a massive collection of documents.</li>
+  </ol>
+</li>
+<li> In a simple Map-Reduce job with <em>m</em> mapper tasks and <em>r</em> reducer tasks, how many output files do you get?
+  <ol type="a">
+  <li>One</li>
+  <li><em>m</em></li>
+  <li><em>r</em></li>
+  <li><em>m &#43; r</em></li>
+  </ol>
+</li>
+<li> One of the key features of Map-Reduce and Spark is their ability to cope with server failure. For each statement below indicate whether it is true or false.
+  <ol type="a">
+  <li>In MapReduce, every map task and every reduce task is replicated across several workers.</li>
+  <li>When a server fails, Spark recomputes the RDD partitions at that server from parent RDD partitions.</li>
+  <li>In Spark, when the programmer calls the persist() function, the data is stored on disk, to facilitate recovery from failure.</li>
+  <li>When a server running a reduce task fails, MapReduce restarts that reduce task either at the same or another server, reusing data stored in local files at the mappers.</li>
+  </ol>
+</li>
+</ol>
+<br>
+<h2>Extra Cradit (4 pts)</h2>
+Download the data from Amazon (you can use the command <code>scp</code> once you are logged in to the master node). Ingest the data into PostgreSQL or SQLServer. Run the query from question 3 part C and time the results. Turn in a file <code>hw8-extracredit.txt</code> with the database system you used, the answer to the query, and the runtime in minutes.
+<br>
+<br>
+</body>
+</html>
+

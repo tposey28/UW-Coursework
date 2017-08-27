@@ -1,0 +1,27 @@
+#!/bin/bash
+# Taylor Posey
+# CSE 374, Brandon Myers
+# Homework 2, Problem 3
+# 1/19/2015
+
+# Print an error message if there are less than two arguments
+if [ $# -lt 2 ]
+then
+        echo "${0}: need at least 2 arguments" >&2
+exit 1
+fi
+
+# Print an error message if the first argument is an existing file
+if [ -e "$1" ]
+then
+        echo "${0}: first file already exists" >&2
+exit 2
+fi
+
+# Set the first argument as the error output and shift arguments
+errorlog="$1"
+shift 1
+
+# Concatenate the contents of the remaining arguments, printing errors
+# to the assigned errorlog
+cat "$@" 2>>"$errorlog"

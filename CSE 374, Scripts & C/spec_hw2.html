@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<head>
+<!-- THIS IS A MACHINE-GENERATED/MAINTAINED FILE. YOU CAN MANUALLY EDIT CONTENT
+   - ONLY BETWEEN HTML COMMENTS "begin HTML content" AND "end HTML content"
+   - OTHER CHANGES WILL BE LOST! TO MAINTAIN, 
+   - USE http://www.cs.washington.edu/htbin-post/content-tool.cgi. -->
+ <title>CSE 374 - Homework 2</title>
+ <link rel="stylesheet" href="/home/cse2012.css" type="text/css">
+<!--[if IE]>
+<style type="text/css" media="all">@import url("/home/cse2012ie.css");</style>
+<![endif]-->
+  <!--[if lte IE 7]>
+<style type="text/css" media="all">@import url("/home/cse2012ie7.css");</style>
+<![endif]-->
+  <!--[if lte IE 6]>
+<style type="text/css" media="all">@import url("/home/cse2012ie6.css");</style>
+<![endif]-->
+</head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-9 node-type-page section-faculty-candidates">
+<div id="page-wrapper">
+ <div id="page">
+  <div id="header">
+   <div class="section clearfix">
+    <div class="region region-purple-banner">
+     <div id="block-block-71" class="block block-block first odd">
+      <div class="content"><a href="//www.washington.edu/"><img src="/images/purple_w.png" alt="university of washington logo" /></a></div>
+     </div><!-- /.block -->
+     <div id="block-menu-menu-top-purple-banner" class="block block-menu first last odd">
+      <div class="content">
+<ul class="menu">
+ <li class="first leaf"><a href="//www.cs.washington.edu/about_us" title="">ABOUT US</a></li>
+ <li class="leaf"><a href="//www.cs.washington.edu/contact" title="">CONTACT US</a></li>
+ <li class="leaf"><a href="https://norfolk.cs.washington.edu/mycse" title="">MY CSE</a></li>
+ <li class="last leaf"><a href="https://www.cs.washington.edu/internal" title="">INTERNAL</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+    <div class="region region-header">
+     <div id="block-block-64" class="block block-block first odd">
+      <div class="content">
+<a href="/" title="Home" rel="home" id="logo"><img src="/images/cse_banner_0.png" alt="Home" /></a>
+      </div>
+     </div><!-- /.block -->
+     <div id="block-nice-menus-1" class="block block-nice-menus last odd">
+      <div class="content">
+<ul class="nice-menu nice-menu-down" id="nice-menu-1">
+<li id="nice-menu-id-news_events" class="menu-news_events menuparent first"><a href="//www.cs.washington.edu/news_events">News &amp;<br>Events</a></li>
+<li id="nice-menu-id-people" class="menu-people menuparent"><a href="//www.cs.washington.edu/people">People</a></li>
+<li id="nice-menu-id-education" class="menu-education menuparent active-trail"><a  class="active-trail active"href="//www.cs.washington.edu/education">Education</a></li>
+<li id="nice-menu-id-research" class="menu-research menuparent"><a href="//www.cs.washington.edu/research">Research</a></li>
+<li id="nice-menu-id-students" class="menu-students menuparent"><a href="//www.cs.washington.edu/students">Current<br>Students</a></li>
+<li id="nice-menu-id-prospective_students" class="menu-prospective_students menuparent"><a href="//www.cs.washington.edu/prospective_students">Prospective<br>Students</a></li>
+<li id="nice-menu-id-faculty_candidates" class="menu-faculty_candidates menuparent"><a href="//www.cs.washington.edu/faculty_candidates">Faculty<br>Candidates</a></li>
+<li id="nice-menu-id-alumni" class="menu-alumni menuparent"><a href="//www.cs.washington.edu/alumni">Alumni</a></li>
+<li id="nice-menu-id-industrial_affiliates" class="menu-industrial_affiliates menuparent"><a href="//www.cs.washington.edu/industrial_affiliates">Industry<br>Affiliates</a></li>
+<li id="nice-menu-id-supportcse" class="menu-supportcse menuparent"><a href="//www.cs.washington.edu/supportcse">Support<br>CSE</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+   </div><!-- section -->
+  </div><!-- /.section, /#header -->
+<div id="main-wrapper">
+ <div id="main" class="clearfix with-navigation">
+  <div id="content" class="column">
+   <div class="section">
+<h1 class="title" id="page-title">CSE 374 - Homework 2</h1>
+<!--begin HTML content-->
+<p><strong>Due: Tuesday, Jan. 20, at 11 pm.</strong>
+
+<p>In this assignment you'll gain some more experience with shell commands and
+  with writing short shell scripts.
+<p>General hint: Before trying to write and debug a script, it's
+  very helpful to first work out the necessary commands by experimenting in a
+  shell   window.
+Also, look at man pages and other descriptions of commands. Sometimes options
+  are available that allow a single command to do something you want instead
+  of having to use several commands.
+<ol>
+  <li>(Commands and output) Use each of the following commands such that<code> blotz </code>(and
+    <em>nothing</em> more)
+    is printed on standard out, and nothing is printed on standard error when
+    the command is entered.
+    You can precede your commands
+    with other commands (e.g., to create a file, etc.) and/or
+    pass options or arguments to your commands. Solve this problem for each of the listed
+    commands individually.<br>
+    <pre>echo, cat, ls, grep, !!</pre>
+    In a text file called <code>problem1</code> describe your solutions, including
+  each command you use and a very brief  explanation of it. And, yes, &quot;<em>nothing</em> more&quot; in the output means &quot;<em><strong>nothing</strong></em> more&quot;.<br>
+  <br>
+  </li>
+  <li>(An alias) Create a bash alias <code>private</code> such that when you
+    run <code>private foo</code>,
+    the entire subtree of the file-system starting at <code>foo</code> (so just <code>foo</code> if
+    it is a file, but <code>foo</code> and all of its files and subdirectories
+    recursively if it is a directory) has its permissions changed as follows:
+    <br>    
+    <ul>
+      <br>
+      <li>The user's (owner's) permissions are unchanged.</li>
+      <li>All group and world (others) permissions are set so they do not allow
+        any access to the file - read, write, or execute<br>
+        <br>
+      </li>
+    </ul>
+	Put your alias in a file <code>defprivate</code> such that entering <code>source defprivate </code> would
+	make <code>private</code> available in the current shell.<br>
+	<br>
+</li>
+  <li>(Script) Create a bash script <code>combine</code> that takes 2 or more
+    arguments, call them <code>f1, f2, ..., fn</code>. Script <code>combine</code> should
+    work as follows:<br>
+ <ul>
+   <br>
+   <li>All arguments are treated as filenames.</li>
+   <li>If fewer than two arguments are given, print a suitable error message
+    on <code>stderr</code> and exit.</li>
+   <li>If a file or directory <code>f1</code> already exists, print "Error: first file
+              exists" on <code>stderr</code> and exit.</li>
+   <li>Otherwise concatenate the contents of <code>f2, ..., fn</code> and
+     copy them to <code>stdout</code>. Do not print any error messages from this (for example
+                if some file does not exist or is a directory). Instead, any
+            such error messages should be written to <code>f1</code>.</li></ul>
+          <br>
+          Restriction: You <b>may not</b> use either <code>/dev/stdout</code> or <code>/dev/stderr</code>.
+          These are not portable across *nix systems, although they are found
+          on most versions of Linux. The problem can be solved without them.<br>
+          <br>
+    Hint: Put filenames in double-quotes in case they contain &quot;funny characters&quot; (such
+          as spaces). Your script should work with any file names, no matter
+          what they contain.<br>
+          <br>
+    Hints: <code>shift, $@, -lt, -a</code>.<br>
+    <br>
+    Hint: Hints are just ideas you might find useful, not things that
+    must appear in your solution.<br>
+    <br>
+  </li>
+	<li>(Script) Create a bash script called <code>datedlinecount</code> that works as follows:<br>
+	  <br>
+	  <ul><li>
+	  If it is given fewer than two arguments, it prints an appropriate error
+	  and exits.
+	  </li>
+	    <li>Assume all the arguments are filenames for text files; you do not need
+	    to check for this.	    </li>
+	    <li>Append to the file indicated by the first argument the following information:<br>
+	      <ul>
+	      <li>
+	      The time and date</li>
+          <li>      One line for each of the second-through-last arguments, containing
+            the number of lines in the	        file and then the name of the file          </li>
+          <li>If there were three or more arguments (i.e., two or more files
+            to be counted), one additional          line with the total number
+            of lines in all the files and then the word <code>total</code>.</li>
+	      </ul>
+	    </li>
+	  </ul>
+	  <br>
+	  For example, executing: <code>./datedlinecount log foo bar; ./datedlinecount
+	  log foo*; cat log </code>	  might produce something like:<br>
+	  <pre>
+	  Mon Jan 14 20:42:16 PDT 2013
+	  4 foo
+	  17 bar
+	  21 total
+	  Mon Jan 14 20:42:17 PDT 2013
+	  4 foo
+	  3 food
+	  7 total
+</pre>
+	  Hints: <code>shift, date, wc, $@</code>.<br>
+	  <br>
+	  Extra credit: The output should include a total line even if only a single
+  file appears in the list. </li>
+</ol>
+  
+<p><strong>Assessment:</strong> Your solutions should be</p>
+<ul>
+  <li>Correct scripts, etc., that run with <code>bash</code> on our reference systems (<code>klaatu</code> and the CSE Fedora 17 virtual machine).</li>
+  <li>In good style, including indentation and line breaks.</li>
+  <li>Of reasonable size.</li>
+</ul>
+<p>Identifying information including your name, CSE 374 Homework 2, the problem
+  number, and the date should appear as comments in each of your files.</p>
+<p><strong>Turn-in Instructions:</strong> Use the turn-in drop box link on
+              the main course web page to submit your files. If you wish, you
+    can combine your files into an archive (see the <code>tar</code> command)
+          and turn that in as a single file. The choice is yours; do whichever
+        is most convenient. 
+<p>The drop box will allow you to turn in your homework up to
+  two days late, if you choose to use one or two of your late days, but you are <em><strong>strongly</strong></em> advised to save your 
+  late days for later in the quarter when they are almost certain to be much more useful.
+  <!--end HTML content-->
+</div><!-- section -->
+  </div><!-- content -->
+<div id="legalese-footer">
+   <div class="region region-legalese-footer">
+    <div id="block-block-1" class="block block-block first last odd">
+     <div class="content">
+<p class="legalese">Computer Science &amp; Engineering University of Washington Box 352350 Seattle, WA 98195-2350 (206) 543-1695 voice, (206) 543-2969 FAX</p>
+<p class="legalese"><a href="//www.washington.edu/online/privacy" target="_blank">UW Privacy Policy</a> and <a href="//www.washington.edu/online/terms" target="_blank">UW Site Use Agreement</a></p>
+     </div><!-- content -->
+    </div><!-- /.block -->
+   </div><!-- /.region -->
+  </div><!-- legalese-footer -->
+ </div><!-- /#page -->
+</div><!-- /#page-wrapper -->
+</body>
+</html>

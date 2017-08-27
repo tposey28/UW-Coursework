@@ -1,0 +1,544 @@
+
+<html>
+<head>
+<title>CSE 373 Assignment A4</title>
+<link rel="stylesheet" href="../../steves-basic.css" type="text/css">
+</head>
+
+<body class="top">
+
+<div class="header">
+
+  <table>
+   <tr height="25"><td>&nbsp;CSE 373, Autumn, 2014 -- University of Washington</td></tr>
+  </table>
+</div>
+
+<div class="wrapper">
+<img src="YMG128.png" align="right">
+
+<h1>Assignment A4: Applying UNION-FIND (including Parts II and III, below)</h1>
+
+<h2>Overview</h2>
+<p>
+
+In this assignment, we will be 
+applying the UNION-FIND technique.
+We'll use it for two different image-processing operations.
+One is determining and labeling the connected components of a spatial data structure. 
+The other is segmenting the pixels of an image into regions ("segmentation").
+
+
+<h2>Part I (Due Monday, Nov. 3, at 5:00 PM)</h2>
+<p>
+
+<h3>I.1. UNION-FIND and Corporate Mergers</h3>
+<p>
+Suppose the following companies begin as small startups:
+<br>
+Acme, Biocybo, CryoBio, DigiToe, Exxoff, Fibon, GIGO, Hashco, iWin, and Junkium.
+<br>
+The following sequence of corporate mergers take place, and in each case, the new entity
+adopts the name of that smaller company whose name was closer to the beginning of the alphabetical
+list.  For example, if iWin and Junkium merge, the new company's name is iWin.
+The merge operations are called UNION.
+Identifying the new company to which the original employees of an old company C work is called FIND.
+<br>
+Q1a. Suppose that the following operations are performed in sequence. Give the results of each FIND operation. No answer is required for UNION operations.  Include in your answer the results for the FIND operation at step 2, even though it is given to you as an example.
+<pre class="mypre">
+1. UNION Biocybo, CryoBio
+2. FIND Biocybo    (answer: Biocybo)
+3. FIND CryoBio
+4. UNION Junkium, Digitoe
+5. UNION Acme, Digitoe
+6. FIND Exxoff
+7. FIND Junkium
+8. UNION Fibon, Hashco
+9. UNION iWin, Biocybo
+10. FIND Hashco
+11. FIND iWin
+12. UNION Fibon, Biocybo
+13. FIND Hashco
+14. UNION Biocybo, Acme
+15. FIND CryoBio
+</pre>
+
+
+<p>
+Q1b. Draw the 10 companies as nodes of a graph, with approximately the following spatial layout.
+Put each company name inside its own circle.  If you wish, you may print out the portion of this page containing these names, draw on the printout, take a legible photo of your drawing, and load that into your assignment answers document.
+<pre class="mypre">
+
+   Acme         Biocybo         CryoBio,
+
+
+
+
+  DigiToe        Exxoff          Fibon
+
+
+
+
+ GIGO     Hashco      iWin        Junkium.
+
+</pre>
+<p>
+Then draw the forest of up-trees that results from performing all the UNION operations in the
+sequence above.   You don't need to redraw after each UNION; just show the final forest of uptrees.
+ (Do not perform any path compression here.)
+<p>
+
+<h3>I.2. UNION-FIND and Point Set Merging</h3>
+<p>
+Consider the following set of vertices, analogous to that above.  Here, instead of corporate
+names, each vertex is identified by an (x,y) coordinate pair.
+<br>
+<img src="pixelvertices.png" width="500" height="450">
+<br>
+<p>
+Q2a. Once again, show the results for the FIND operations, but use this new set
+of items and the following sequence.  Assume that a UNION (x0,y0), (x1,y1)
+operation leads to a subset of name (x0,y0) if either (x0 < x1) or (x0 = x1 and y0 < y1), and to a subset of name (x1,y1) otherwise.  Also, let us 
+define a new operation FIND_UNION A, B to be equivalent to UNION FIND(A), FIND(B).
+(Don't show the results for the embedded FIND operations in FIND_UNION.)
+<pre class="mypre">
+1. FIND (2,1)
+2. FIND_UNION (1,2), (2,2)
+3. FIND_UNION (1,1), (2,1)
+4. FIND_UNION (3,2), (3,3)
+5. FIND_UNION (1,3), (2,3)
+6. FIND (3,3)
+7. FIND (2,3)
+8. FIND_UNION (3,1), (3,0)
+9. FIND_UNION (3,2), (3,1)
+10. FIND (3,3)
+11. FIND_UNION (0,3), (1,3)
+12. FIND_UNION (0,1), (0,2)
+13. FIND (1,3)
+14. FIND_UNION (1,0), (2,0)
+15. FIND_UNION (0,3), (0,2)
+16. FIND (2,3)
+17. FIND_UNION (0,0), (0,1)
+18. FIND (1,3)
+19. FIND (1,2)
+20. FIND_UNION (2,2), (3,2)
+21. FIND_UNION (2,0), (3,0)
+22. FIND (3,3)
+23. FIND (1,1)
+</pre>
+
+<p>
+Q2b. Now draw the forest of up-trees that results from performing all the UNION operations in the
+sequence above.  (Again, do not perform any path compression here.)
+
+<h3>I.3. Connected Components of an Image</h3>
+<p>
+We define the <i>strict pixel graph</i> of an image to be the pair Gs = (V, E), where V is the set of pixels, like those shown
+above in the diagram for the previous exercise.   Then E is the set of edges, where an edge e connects v0 = (x0, y0) with v1 = (x1, y1)
+provided | x0 - x1 | + | y0 - y1 | = 1 and the colors of the two pixels are equal.
+
+<p>
+
+Consider the simple digital image below, in which each pixel's color is represented by just a single
+letter.  Here we can imagine Y = yellow, M = magenta, G = green.
+
+<br>
+<img src="Fig-A4I3.png">
+<br>
+<p>
+Q3a. Draw the strict pixel graph on top of a copy of the image.  The edges should be undirected.
+<p>
+Q3b. How many connected components are there in this graph?
+<p>
+Q3c. Number the components starting at 1.  The components should be ordered according to the
+minimum pixelID value in them, where a pixelID for the pixel at (x,y) is y*w + x, where w is the
+width of the image in pixels (i.e., w is the number of columns in the image).
+The connected component containing the pixel at (0,0) should get number 1.
+Write a 1 on each pixel in that component.  Find the next component by scanning the pixels in order
+of increasing pixelID values until you find a pixel that is not in a component already labeled.
+Label each pixel in this new component 2, etc., until you have labeled all the pixels of all the
+components.
+
+
+<h2>Part II. Implementation of Connected Components</h2>
+
+<p>
+Using the 
+<a href="ImageComponents.java">main starter code</a> and
+<a href="ProgressiveColors.java">ProgressiveColors.java</a>
+helper file,
+implement the features described below.  The test image to use is a scan of
+the first page of Abraham Lincoln's 
+<a href="gettysburg-address-p1.png">Gettysburg Address</a>, not only an appropriate reminder about Veterans Day,
+but a good example of a bicolor image having many connected components, each corresponding to a word of the
+document (although there are also some connected components that represent individual characters of text, and
+there are a number of separate connected components that represent parts of the background -- the paper on which
+Lincoln did his handwriting).
+
+
+<h3>II.1. Finding the Connected Components of an Image.</h3>
+<p>
+Using a two-dimensional int array of pixelID values, named parentID, write code that applies the UNION-FIND method, as
+in Exercise Q2b, to build a forest of up-trees for the current image.
+Each element of parentID will either be the pixelID value of the parent of the
+up-tree node, or -1 if the node itself is the root of an up-tree.
+Initially, before any of the UNION operations, each element of the array should be -1,
+since every pixel is in its own subset.
+
+<p>
+You should write a pair of methods getXcoord and getYcoord that will return
+the x and y coordinates of the pixel having a given pixelID value.
+Then it will be possible to follow the path from any pixel to the root of its up-tree
+by repeatedly getting the parent node's pixelID from the parentID array, and then
+from the pixelID getting the x and y coordinates of the parent, and then getting
+the its parent's pixelID, etc., until the root of the up-tree is reached.
+Implement the FIND method to perform that path following and return the pixelID of
+the root.
+
+<p>
+Your UNION method should take two pixelID values representing roots of up-trees,
+and it should make the one having the smaller pixelID value be the parent of the other.
+
+
+<p>
+Now apply your UNION-FIND implementation to the problem of analyzing an image.
+Your code will merge groups of pixels so that, at the end, each connected component
+of the strict pixel graph will be represented by one up-tree.
+
+<p>  
+To do this, your code should
+scan the image considering
+all the pixel pairs for which edges exist (according to the definition of Gs, in Part I).
+Perform FIND_UNION on all such pairs.   Starting at (x, y) = (0, 0), check to see
+if Gs contains an edge to (x+1, y) = (1, 0) and/or to (x, y+1) = (0, 1).  If it does,
+perform the FIND operations on the endpoints of this edge, and if the results are
+different, then UNION the two subsets.
+After processing
+this pixel, go on to the next (incrementing x).  When the first row of pixels is complete,
+do the same for the second row, etc., until all rows of pixels have been processed.
+
+<p>
+Instrument your UNION method, so that a count is maintained of the number of times
+UNION is called.  That count should be set to zero before the scan begins.
+At the end, print out the count in the following style.
+<pre class="mypre">
+The number of times that the method UNION was called for this image is: 2764.
+</pre>
+<p>
+
+<h3>II.2. Counting the Connected Components</h3>
+<p>
+Next, set an integer variable, count, to zero, and do another scan of the parentID array.
+Each time a root is found, increment count.  At the end of the scan print out the
+value of count with explanatory text as follows:
+<pre class="mypre">
+The number of connected components in this image is: 79.
+</pre>
+<p>
+Note that the number of times UNION was called, plus the number of connected components
+found should add up to the number of pixels in the image, so you can use this fact
+in debugging your code.
+
+<h3>II.3. Labeling the Connected Components</h3>
+<p>
+Now modify your code so that each time a root is found, that root is associated with
+the count in a hashtable named componentNumber.  Thus the keys of your hashtable will
+be of class Integer, and the values will also be of class Integer. 
+
+<p>
+Write code for another scan of the image, this time doing the following for each pixel:
+(a) FINDing the root of the pixel's up-tree;
+(b) Looking up the count value for that root in the hashtable.  (Then convert the Integer to an int.)  Let's call the resulting int k.
+(c) Determine the kth progressive color by calling the provided method getProgressiveColor(k).
+(d) Replace the rgb information of biWorking with the new color.
+
+<p>
+When the scan is complete, the method repaint() should be called to show the
+newly colored image.
+
+<p>
+Johnson Goh has provided the following illustration.
+Here is what your image should look like, after you have completed the labeling for the
+given image of page 1 of Lincoln's Gettysburg Address.  The colors may 
+depend on your scanning order and how you implement the UNION operation.  However, we would
+expect the image to look like this, assuming you are following the specifications given above.
+<br>
+<img src="word-colors.png">
+<br>
+
+
+
+
+
+<p>
+
+Turn in your source files through our Catalyst CollectIt
+<a href="https://catalyst.uw.edu/collectit/dropbox/tanimoto/32811">dropbox</a>.
+Part II of this assignment is due Monday, November 10 at 5:00 PM.  Late penalties apply (see
+the
+<a href="../../policies.html">policies</a> page for details).
+
+<h2>Part III. Image Segmentation with Kruskal's Minimum Spanning Tree Algorithm (Due Monday, Nov. 17 at 5:00 PM)</h2>
+
+<p>
+After completing Part II, you've got an implementation of the UNION-FIND
+abstract data type that we can re-use for a more general problem than
+the connected-components analysis.  When the connected components were
+found, the pixels within a component had to have exactly the same color values.
+With our new method, we won't require exact matches, and we'll set our
+merging criteria to work on the basis of number of components rather than
+color equivalence or differences.
+
+<p>
+To make this activity even more interesting, we'll integrate the use of
+a priority queue.  We will also use the graph-theoretic constructs of
+minimum spanning trees and minimum spanning forests.
+
+<h3>III.1. The Weighted Pixel Graph.</h3>
+
+<p>
+In Part I, we defined the strict pixel graph for an image to have an
+edge between adjacent pairs of pixels, provided they had the same color.
+We now define the weighted pixel graph for an image to have an edge
+between every adjacent pair of pixels, regardless of color.  However,
+each edge also carries a numeric weight.  We define the weight to be
+the squared Euclidean distances between the colors of the corresponding
+pixels.  For an example of an image and its weighted pixel graph,
+see the worksheet and its solutions page linked from GoPost.
+
+<h3>III.2. Minimum Spanning Forests.</h3>
+
+<p>
+Given a weighted undirected graph G=(V,E) with nonnegative weights,
+and an integer n<sub>regions</sub>,
+a <i>minimum spanning forest</i> of size n<sub>regions</sub>
+for G is a subgraph G'=(V, E') such that G' contains n<sub>regions</sub> connected components C<sub>i</sub>,
+and no other subgraph G''=(V, E'') having n<sub>regions</sub> connected components has total weight
+lower than the total weight of E'.
+
+<p>
+Note: this is a "generalized" minimum spanning forest definition
+that allows G to be broken up into separate connected components. For a given value of
+n<sub>regions</sub> (number of regions), there may be a set of alternative
+minimum spanning forests that tie for lowest total weight, due to the presence of edges of equal weights.
+
+<p>
+Note also that if 
+ n<sub>regions</sub> = 1,
+then G' contains exactly one connected component, and G' is a minimum
+spanning tree for G.   
+
+<p>
+The worksheet solution mentioned earlier shows a minimum spanning forest
+having 3 trees for the weighted pixel graph of an image.
+
+<h3>III.3. Image Segmentation into Regions.</h3>
+
+<p>
+An image segmentation is a partition of the image's pixels into a set of
+regions {R<sub>0</sub>, R<sub>1</sub>, ..., R<sub>m-1</sub>}
+such that each R<sub>i</sub> is a four-connected set of pixels
+(there is a path within the region from any member u to any other member v,
+consisting of steps that go only north, south, east, or west),
+the pixels obey a color constraint, and the partition is maximal -- any
+additional merging would either violate the connectivity requirement
+or the pixel color constraint.
+
+<p>
+We'll now define a version of image segmentation based on finding
+a minimum spanning forest for the weighted pixel graph of an image.
+Each pixel of the image is represented by one vertex in the graph,
+and each region in the segmentation will be represented by one
+tree in a minimum spanning forest.
+
+<p>
+The color constraint is of the following type.  Any two adjacent pixels,
+if they are in the same region 
+ R<sub>i</sub> 
+must have a squared color difference less than or equal to DELTA, where
+DELTA is a contrast limit set either by the user or by the segmentation
+algorithm on the basis of how many regions to find.
+
+<h3>III.4.  Kruskal's Algorithm.</h3>
+
+<p>
+To find the minimum spanning forest for a given number of regions or
+a given DELTA, we do the following.
+
+Initialize a UNION-FIND structure (e.g., using the parentID scheme from
+Part II) with each pixel in its own subset.
+
+<p>
+Initialize the set E of edges of the weighted pixel graph, and insert
+them all into a priority queue Q.   Note that we have to compute the
+weights, since those serve as priority values in Q.
+
+<p>
+Optional, and only for debugging on small images:
+ Maintain a set E' of minimum spanning forest edges, and initialize
+it to the empty set: E' = {}.
+
+<p>
+Begin a loop, during which the minimum spanning forest is constructed:
+
+<pre class="mypre">
+Finished = False
+nTrees = numberOfPixelsInTheImage
+
+While not finished,
+  e = Q.deleteMin()
+  w = weight(e)
+  if w > DELTA or nTrees <= nRegionsDesired:
+    finished = True
+    break;
+  u = endpoint1(e)
+  v = endpoint2(e)
+  rootu = find(u)
+  rootv = find(v)
+  if rootu != rootv:
+     union(rootu, rootv)
+     nTrees -= 1
+     (optional) insert e into E'
+
+print "Done finding minimum spannng forest"
+</pre>
+
+<p>
+From here, the algorithm proceeds as with connected components.
+
+<p>
+Scan the array of uptree nodes, counting the number of distinct roots of uptrees,
+ and for each such root, insert into a hashtable (rootPixelID, count).
+
+Then scan the image and for each pixel, recolor it using progressiveColor(k)
+where k is the count value of the pixel's uptree root.
+
+<h3>III.5.  Implementation</h3>
+
+<p>
+Building on your solution to Part II,
+add a new menu item to your ImageComponents program.  This will be another JMenuItem and should be given the variable name CCItem2.
+It should appear, in the running program, just under the
+item labeled "Compute Connected Components and Recolor", and the new label
+should be "Segment Image and Recolor".
+<p>
+
+Add to your code, in void handleCCMenu, after the place where you handle CCItem1:
+
+<pre class="mypre">
+        if (mi==CCItem2) { 
+        	int nregions = 25; // default value.
+        	String inputValue = JOptionPane.showInputDialog("Please input the number of regions desired");
+        	try {
+        		nregions = (new Integer(inputValue)).intValue();
+        	}
+        	catch(Exception e) {
+        		System.out.println(e);
+        		System.out.println("That did not convert to an integer. Using the default: 25.");
+        	}
+        	System.out.println("nregions is "+nregions);
+        	// Call your image segmentation method here.
+        }
+ 
+</pre>
+
+<p>
+For your priority queue, the suggested implementation is to use
+Java's PriorityQueue class.  To use this, import it from java.util.PriorityQueue.
+You should also create an inner class Edge that contains three components:
+endpoint0, and endpoint1 (both vertices that can just be int values corresponding to pixelID values) and the weight (which can be of type int).
+This Edge class should implement the Comparable interface (and so it must
+implement a method called compareTo(Edge e2).  Your compareTo method
+should compare the current edge with the edge in the argument by looking
+at the weight, and return -1, 0, or 1, depending on whether the current
+edge's weight is less than, equal to, or greater than the weight of the
+edge in the argument.
+If you wish to implement your own priority queue using a binary heap,
+you can do that for extra credit (see below).
+
+<h3>III.6. Testing.</h3>
+
+<p>Test your program with the following images.  Make the 
+<a href="donut2.png">"donut2.png"</a>
+image the
+default image that loads up when you start the program. (Changed from donut.png on Nov. 11.)
+The other images to try are 
+<a href="4sections.png">"4sections.png"</a>
+<a href="gradients.png">"gradients.png"</a> and <a href="ArezzoPiazza.jpg">"ArezzoPiazza.jpg"</a>.
+
+<p>
+Johnson Goh has provided the following sample results for some of these images. For donut2.png with 9 seguments: <br>
+<img src="donut2-9segments.png" width="110" height="110">
+<br>
+For 4sections.png with 4 segments:<br>
+<img src="4.png">
+<br>
+For 4sections.png with 103 segments:<br>
+<img src="103.png">
+<br>
+For 4sections.png with 202 segments:<br>
+<img src="202.png">
+<br>
+For 4sections.png with 301 segments:<br>
+<img src="301.png">
+<br>
+
+
+<h3>III.7. Extra Credit.</h3>
+
+<p>
+(a) 5 points.
+Add an option to do the segmentation on the basis of a given <b>DELTA</b> value
+rather than the <b>nregions</b> value.  This should start out with an additional
+menu item for "Segment Image Using a Maximum Pixel DELTA".  This should
+then offer a dialog box like that used for nregions, and it should
+run the loop of Kruskal's algorithm until the DELTA value would be
+exceeded.
+
+<p>(b) 10 points.
+Implement the priority queue as a binary heap, including the operations
+DELETEMIN (5 points) and BUILDHEAP (5 points).
+Also implement methods printSize() and printComparisons() that print out
+the current size (number of elements in the binary heap) and the
+number of comparisons made since the heap was created or the count was set to
+zero (whichever was more recent). Also implement a method resetComparisonsCount()
+to accomplish setting the count back to zero.
+Have your program print out (to the console) the number of comparisons
+used by your custom priority queue at the end of each BUILDHEAP operation
+(and then set the count back to zero).  Also print out the number of comparisons
+used at the end of the sequence of DELETEMIN operations after each
+run of the image segmentation process (and then again, set the count back to zero).
+
+<p>(c) 5 points.
+Implement UNION-by-size (2 points) and path compression (3 points), as an alternative
+to the simple UNION and FIND methods you've already implemented, with one additional menu
+item CCItem3 (and a menu choice "Segment image, using path compression during FINDs")
+that runs your new method.  Add "instrumentation" to both your old and new
+UNION-FIND methods so that it is easy to compare their performance.
+In particular, keep track of the number of up-tree link traversals used during FIND
+operations (including any FIND_UNION operations), and at the end of the labeling pass,
+print out the total number of FIND operations, the total number of up-tree link traversals,
+and the average number of link traversals per FIND.
+
+<h3>III.8. What to Turn In.</h3>
+
+<p>For Part III, turn in your new file ImageComponents.java, and
+if you do the extra credit part (b), also turn in a file PriorityQ.java.
+
+
+
+<p>
+
+&nbsp;
+<br>
+Version 0.97. Last major update Monday, Nov. 10, 2014 at 14:07 PM.
+Changes to the "testing" section made on Tues. Nov. 11, at 23:48 PM.
+Adjustments to extra-credit option (b) made on Nov. 12, at 00:25 AM.
+</div>
+
+
+
+</body>
+
+
+</html>

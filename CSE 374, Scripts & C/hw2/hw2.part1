@@ -1,0 +1,20 @@
+Script started on Mon 19 Jan 2015 05:22:13 PM PST
+]0;tposey28@klaatu:~[?1034h[tposey28@klaatu ~]$ echo blotz
+blotz
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ echo blotz > blotz
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ cat blotz
+blotz
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ mkdir stuff
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ cp blotz stuff
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ ls stuff
+blotz
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ grep --color=never blotz blotz
+blotz
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ alias blotz=
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ blotz
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ !!
+blotz
+]0;tposey28@klaatu:~[tposey28@klaatu ~]$ exit
+exit
+
+Script done on Mon 19 Jan 2015 05:24:19 PM PST

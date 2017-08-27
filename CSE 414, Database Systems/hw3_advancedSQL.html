@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+ "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>CSE 414 Homework 3</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+dl dt { font-weight: bold; }
+.style1 {color: #006600}
+li{
+  margin: 10px 0;
+}
+</style>
+
+<body>
+<h1>CSE 414 Homework 3: SQL (advanced) and Physical Tuning (indexes)</h1>
+<dl>
+  <dt>Objectives:</dt>
+  <dd>To practice advanced SQL. To get familiar with commercial database management systems (SQL Server) and to get familiar with using a database management system in the cloud (SQL Azure). To practice physical tuning through the addition of appropriate indexes.</dd>
+
+  <dt>Assignment tools:</dt>
+  <dd><a href="http://www.microsoft.com/sqlserver" target="_blank">SQL Server</a> on Windows Azure through <a href="https://azure.microsoft.com/en-us/services/sql-database/" target="_blank">SQL Azure</a></dd>
+
+  <dt>Due date:</dt>
+  <dd>Tuesday, April 26, 2016, at 11:00 pm. Turn in your solution using the assignment drop box linked from the main course web page.</dd>
+
+  <dt>What to turn in:</dt>
+  <dd><code>hw3-queries.sql</code></dd>
+</dl>
+
+<p>
+This homework is a continuation of homework 2, with three changes. We will use a larger dataset, the queries are more challenging, and you will have to use a commercial database system. SQLite simply cannot execute these queries in any reasonable amount of time; hence, we will use SQL Server, which has one of the most advanced query optimizers. SQL Server also has a very nice client application, SQL Server Management Studio, that you will get to use in this assignment.
+
+<p> Here is again the schema of the Flights database, for your reference:
+<blockquote>
+<p>
+  <b>FLIGHTS</b> (fid, year, month_id, day_of_month, day_of_week_id, carrier_id, flight_num, origin_city, origin_state, dest_city, dest_state, departure_delay, taxi_out, arrival_delay, canceled, actual_time, distance)<br>
+  <b>CARRIERS</b> (cid, name)<br>
+  <b>MONTHS</b> (mid, month)<br>
+  <b>WEEKDAYS</b> (did, day_of_week)<br>
+
+  <br>We leave it up to you to decide on the types to use for the various fields. Note that SQL Server will complain if you try to ingest data and it needs to truncate it because VARCHAR fields are too small or if integer fields are used for real valued data.
+
+  <br><br>In addition, impose the following constraints:<br>
+  <ul>
+  <li>The primary key of the FLIGHTS table is fid.</li>
+  <li>The primary keys for the other tables are cid, mid, and did respectively.</li>
+  <li>Flights.carrier_id references Carrier.cid.</li>
+  <li>Flights.month_id references Months.mid.</li>
+  <li>Flights.day_of_week_id references Weekdays.did.</li>
+  </ul>
+</p>
+</blockquote>
+
+<p>In this homework, you will do four things. First, you will create a database in the SQL Server database management system running as a service on Windows Azure. Second, you will write and test the SQL queries below; keep in mind that the queries are quite challenging, both for you and for the database engine. Third, you will add indexes to speed up your queries. Finally, you will reflect on using a database management system running in a public cloud.</p>
+
+<h4>A. Setting up a database in SQL Azure (0 points)</h4>
+
+<p>In this assignment, we want you to learn how to use SQL Azure from scratch. Your first step will thus be to setup a database in the SQL Azure service and ingest your data. This step may seem tedious but it is crucially important. We want you to be able to continue using SQL Azure after the class ends. For this, you need to know how to use the system starting from nothing.
+
+<p><strong>Plan ahead: Expect these steps to take time to complete! </strong>
+
+<p><strong>Step 0: Create an Account.</strong>
+
+<p> If you don't have a Microsoft Azure account, go to <a href="https://azure.microsoft.com/en-us/account/" target="_blank">https://azure.microsoft.com/en-us/account/</a> and click on the "Portal" link in the upper right. It will take you to a sign in page where you can create a new account using any email address you own.
+
+<p><strong>Step 1: Activate your promotion code.</strong>
+
+<p> Go to: <a href='http://www.microsoftazurepass.com' target='_blank'>http://www.microsoftazurepass.com</a> and activate the code that was distributed to you.</p>
+
+<p><strong>Step 2: Learn about SQL Azure.</strong></p>
+
+ <p> Spend some time clicking around, reading documentation, watching tutorials, and generally familiarizing yourself with SQL Azure.</p>
+
+<p><strong>Step 3: Setup a database.</strong></p>
+
+<p> From the main Azure portal (<a href="https://portal.azure.com/" target="_blank">https://portal.azure.com/</a>), select the SQL databases section on the left panel and click the add icon near the top left of the page. A panel with configuration options for the new DB instance will appear to the right. Use the following configuration options:
+<ul>
+  <li> Give your database a name (e.g. "cse414-16sp"). </li>
+  <li> Create a new server by selecting Server -> Create a new Server. Name your server and choose a login and password. Do <strong> not include an @ symbol </strong> in your login. Select West US for the location of the server and choose No for the Create V12 option. Please make sure <strong> not to use v12 </strong> as v12 does not yet support accessing the database from the browser. </li>
+  <li> Select the Standard S1 Pricing Tier. To learn more about service tiers, see <a href="https://azure.microsoft.com/en-us/pricing/details/sql-database/" target="_blank">https://azure.microsoft.com/en-us/pricing/details/sql-database/</a>. </li>
+</ul>
+
+<p>You should now be able to create your database tables. Before proceeding, go to the main page of your database by first clicking on "All resources" on the left and selecting your database. Take note of the server name because you will need it later.</p>
+<p>Note: at any point in time, <strong>if you get the error "error connecting to the server"</strong>, it is because of the firewall on the server. Go to http://manage.windowsazure.com &rarr; SQL DATABASES &rarr; SERVERS &rarr; your server name &rarr; CONFIGURE &rarr; add the rule: "all access" "0.0.0.0" "255.255.255.255" &rarr; press save at the bottom of the page.</p>
+
+<p>Now use one of the following methods to create your tables. We recommend using SQL Server Management Studio on your own machine (you can get a copy from <a href='https://www.cs.washington.edu/lab/software' target='_blank'>https://www.cs.washington.edu/lab/software</a>) or one in the lab machines</p>
+
+<ul>
+<li>Use the browser</li>
+  <ul>
+  <li> Navigate to https://server-name.database.windows.net in a browser that supports Microsoft Silverlight (Firefox, Safari are options. Chrome will not work). Log in using your DB name, username, and password for the server chosen when creating the server.</li>
+  <li> To create Tables, you can click on "Design" in the bottom left and use the GUI or you can click on "New Query" toward the top left and run your CREATE TABLE statements. </li>
+  </ul>
+
+<li>Use SQL Server Management Studio</li>
+  <p>If you have windows, it may already be installed or you should be able to install the appropriate software. Try the "Install Microsoft SQL Server Data Tools" (let us know how that works and see next point for more details on connecting).</p>
+  <p>You can also use SQL Server Management Studio already installed on the PC lab machines and also available on all VDI lab machines -- see: <a href="http://vdi.cs.washington.edu/vdi/" target="_blank">http://vdi.cs.washington.edu/vdi/</a>). Before you can connect, you will need to change the firewall rules on the Azure server as explained above.</p>
+  <p>If neither of those works, you can spin up a Windows VM directly in Azure and follow the steps above. You may need to install bcp. It does not seem to be included by default.</p>
+  <ul>
+  <li>Server type: Database Engine</li>
+  <li>Server name: [server_name].database.windows.net (found in the Azure portal)</li>
+  <li>Authentication: SQL Server Authentication</li>
+  <li>Login: The login that you setup</li>
+  <li>Password: The password that you setup</li>
+  </ul>
+</ul>
+
+<h4>B. Ingesting Data (0 points)</h4>
+
+Now ingest the data from Homework 2. Make sure you execute your CREATE TABLE statements first.  Please make sure the types in your CREATE TABLE statement match the data (text fields are long enough and correct numeric types are used). You will need to use a utility called <strong>bcp</strong>, which should come with the command prompt on Windows (search for cmd.exe in explorer). Again, you can use a Windows machine in the lab or a Windows VM on Azure. 
+
+If you are using a unix system, you can use the <strong>freebcp</strong> utility, a part of <a href="http://www.freetds.org/userguide/"> freetds</a>. On a mac, if you use the homebrew package manager, you can install freetds using the command:
+
+<blockquote><p> brew install freetds </p></blockquote>
+
+Make sure homebrew installs freetds version at least 0.95.79. You may need to upgrade and update homebrew first using the command:
+
+<blockquote><p>
+  brew update<br>
+  brew upgrade
+</p></blockquote>
+
+The command to load [file_name] into the table [table_name] with bcp is
+
+<blockquote><p>
+    bcp dbo.[table_name] in [file_name] -U [user_name]@[server_name] -P [password] -S [server_name].database.windows.net -c -t [separator] -r [newline] -d [database]</p>
+</blockquote>
+
+<p>Here is an example with server pz4ur74rts.database.windows.net, user magda, and database name cse414-16sp:
+
+<blockquote><p>
+      bcp dbo.Carriers in carriers.csv -U magda@pz4ur74rts -S pz4ur74rts.database.windows.net -P "some-complicated-password" -c -t "," -r "\n" -d cse414-16sp</p>
+</blockquote>
+
+For flights, you need to use a different end-of-line character:
+
+<blockquote><p>
+      bcp dbo.Flights in flights-small.csv -U magda@pz4ur74rts -S pz4ur74rts.database.windows.net -P "some-complicated-password" -c -t "," -r "0x0a" -d cse414-16sp</p>
+</blockquote>
+
+Usage of freebcp is similar to bcp except you need to use -D instead of -d when specifying the database. Also, you may need to use single quotes instead of double quotes and may need to use \n instead of 0x0a or \r\n instead of \n.
+
+<blockquote><p>
+    freebcp dbo.[table_name] in [file_name] -U [user_name]@[server_name].database.windows.net -P [password] -S [server_name].database.windows.net -c -t [separator] -r [newline] -D [database]</p>
+</blockquote>
+
+<p><strong>Important</strong>: When loading the flights-small.csv table, bcp will appear to hang toward the end.  It did not hang. It is creating the index on the primary key. It will take what seems like an eternity but is approximately 20 min and then it will complete.</p>
+
+<p>As a sanity check, count the number of rows in the Azure Flights table and make sure it matches the number of rows in the SQLite Flights table. If the count on Azure is too low, the data didn't all get transfered. You will need to drop the table and try again. If it continues to not work, split the flights-small.csv file into multiple smaller files and import one at a time. On mac, to split the file into 10 smaller files, run:</p>
+
+<blockquote><p>
+      split -l 114868 flights-small.csv flights-small-part</p>
+</blockquote>
+
+On windows, you can either use <a href="https://www.cygwin.com/" target="_blank">cygwin</a> or install something like <a href="http://www.hjsplit.org/" target="_blank">HJ-Split</a>.
+
+<h4>C. SQL Queries (15 points):</h4>
+
+
+<p>For each question below, write a single SQL query to answer that question (you can use subqueries). Add a comment to each query with the question number, the number of rows your query returns, how long the query took, and the first 20 rows of the result (if the result has less than 20 rows, output all of them). You can simply copy and paste the first rows into the comment. Please end each SQL query with a semicolon.
+<ol>
+
+  <li>
+  <p>For each origin city, find the destination city (or cities) with the longest direct flight. By direct flight, we mean a flight with no intermediate stops. Judge the longest flight in time, not distance. Show the name of the origin city, destination city, and the flight time between them. Do not include duplicates of the same origin/destination city pair. Order the result by origin_city name then destination city name.</p>
+  <em> [Output relation cardinality: 333 rows]</em></li>
+
+  <li>
+  <p>Find all origin cities that only serve flights shorter than 3 hours. You can assume that flights with NULL actual_time are not 3 hours or more. Return only the names of the cities sorted by name. List each city only once in the result.</p>
+  <em>[Output relation cardinality: 147]</em></li>
+
+  <li>
+  <p>For each origin city, find the percentage of departing flights shorter than 3 hours. For this question, treat flights with null actual_time values as longer than 3 hours. Return the name of the city and the percentage value. Order by percentage value.
+  Be careful to handle cities without any flights shorter than 3 hours. We will accept both 0 and NULL as the result for those cities.</p>
+  <em>[Output relation cardinality: 327]</em></li>
+
+  <li>
+  <p>List all cities that cannot be reached from Seattle though a direct flight but can be reached with one stop (i.e., with two flights). Do not include Seattle as one of these destinations (even though you could get back with two flights). Order results alphabetically.</p>
+  <em>[Output relation cardinality: 256]</em></li>
+
+  <li>
+  <p>List all cities that cannot be reached from Seattle though a direct flight nor with one stop (i.e., with two flights). Do not forget to consider all cities that appear in a flight as an origin_city. Order results alphabetically.</p>
+  <em>[Output relation cardinality: 3 or 4, depending on what you consider to be the set of all cities]</em></li>
+
+</ol>
+
+<h4>D. Physical Tuning (11 points)</h4>
+<p>In this part you will be asked to examine the query plan of a SQL query. You do that in SQL Server Management Studio my clicking on the option to "Include actual execution plan" and looking at the execution plan tab after the query finishes. You can view the used query plan in the online interface by clicking the actual button in the new query interface and clicking on the Query Plan link near the results.</p>
+<ol>
+<li>
+<p>Take the following 3 queries:</p>
+  <ol type="i">
+  <li>
+  <pre>
+  SELECT DISTINCT carrier_id
+  FROM Flights
+  WHERE origin_city = 'Seattle WA' AND actual_time <= 180;
+  </pre>
+  </li>
+  <li>
+  <pre>
+  SELECT DISTINCT carrier_id
+  FROM Flights
+  WHERE origin_city = 'Gunnison CO' AND actual_time <= 180;
+  </pre>
+  </li>
+  <li>
+  <pre>
+  SELECT DISTINCT carrier_id
+  FROM Flights
+  WHERE origin_city = 'Seattle WA' AND actual_time <= 30;
+  </pre>
+  </li>
+  </ol>
+Answer the following.
+  <ol type='a'>
+  <li> Choose one single simple index (index on one attribute) that is most likely to speed up all three queries. Write down the CREATE INDEX statements in the <code>hw3-queries.sql</code> file and explain why you chose that index in a SQL comment.</li>
+  <li>Add this index to your Azure instance. For each of the three queries, indicate if SQL Azure used the index; if not, give a short explanation why not. As a SQL comment in <code>hw3-querires.sql</code>, list the query numbers, if the index was used, and, if applicable, an explanation why the index was not used. Note that Azure creates and uses a clustered index, usually on the primary key of the table, by default. We only care about the index you create.</li>
+  </ol>
+</li>
+<li>Consider this query:
+<pre>
+  SELECT DISTINCT F2.origin_city
+  FROM Flights F1, Flights F2
+  WHERE F1.dest_city = F2.dest_city
+     AND F1.origin_city='Gunnison CO'
+     AND F1.actual_time <= 30;
+</pre>
+Choose one simple index (index on one attribute), different from the index for the question above, that is likely to speed up this query. Write down the CREATE INDEX statement in <code>hw3-queries.sql</code> and explain why you chose that index as a SQL comment.</li>
+
+<li>Add this second index to your Azure Database (you should already have the first one added), and check that SQL Azure indeed uses the index. If not, give a brief explanation why not.</li>
+
+<li>See how the queries from part C perform now that you have two indexes. Record the runtimes of the queries with and without indexes as a comment in <code>hw3-queries.sql</code>. Note that different instances of SQL Azure can have a very different performance and that creating an index takes time.
+
+<p><b>Extra credit (4 points):</b> Repeat the timing experiments by adding the same two indexes on a larger flights dataset: <a href="http://www.cs.washington.edu/education/courses/cse414/flights-more.tar.gz">flights-more.tar.gz</a>. Note that ingesting data into a table that has indexes is much slower than creating indexes later in bulk. So we recommend that you either drop your indexes or create a new table called Flights2 and ingest the data there. Time your queries without indexes. Then add indexes and re-run your queries. Feel free to use any subset of the data we provide. Indicate what data you used in your answer to this question.</p>
+
+<p>Record the dataset you ended up using and the timing results in <code>hw3-extracredit.txt</code>.</p></li></ol>
+
+<h4>E. Using a Cloud Service (1 point)</h4>
+<p>The DBMS that we use in this assignment is running somewhere in one of Microsoft's data centers. Comment on your experience using this DBMS cloud service. What do you think about the idea of offering a DBMS as a service in a public cloud?</p>
+<p>
+<strong>Put all your code (<code>SELECT-FROM-WHERE</code> and <code>CREATE INDEX</code> code) and SQL comments in a file called<code> hw3-queries.sql</code>. Put your extra credit results in <code>hw3-extracredit.txt</code>.</strong>

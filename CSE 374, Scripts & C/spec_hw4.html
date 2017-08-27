@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CSE 374 - Programming Concepts and Tools - Winter 2015 - Homework 4</title>
+
+  <link rel="stylesheet" href="/home/cse2012.css" type="text/css">
+  <!--[if IE]>
+<style type="text/css" media="all">@import url("/home/cse2012ie.css");</style>
+<![endif]-->
+  <!--[if lte IE 7]>
+<style type="text/css" media="all">@import url("/home/cse2012ie7.css");</style>
+<![endif]-->
+  <!--[if lte IE 6]>
+<style type="text/css" media="all">@import url("/home/cse2012ie6.css");</style>
+<![endif]-->
+</head>
+<body class="html not-front not-logged-in one-sidebar sidebar-first page-node node-type-page" >
+<div id="page-wrapper">
+ <div id="page">
+  <div id="header">
+   <div class="section clearfix">
+    <div class="region region-purple-banner">
+     <div id="block-block-71" class="block block-block first odd">
+      <div class="content"><a href="//www.washington.edu/"><img src="/images/purple_w.png" alt="university of washington logo" /></a></div>
+     </div><!-- /.block -->
+     <div id="block-menu-menu-top-purple-banner" class="block block-menu first last odd">
+      <div class="content">
+<ul class="menu">
+ <li class="first leaf"><a href="//www.cs.washington.edu/about_us" title="">ABOUT US</a></li>
+ <li class="leaf"><a href="//www.cs.washington.edu/contact" title="">CONTACT US</a></li>
+ <li class="leaf"><a href="https://norfolk.cs.washington.edu/mycse" title="">MY CSE</a></li>
+ <li class="last leaf"><a href="https://www.cs.washington.edu/internal" title="">INTERNAL</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+    <div class="region region-header">
+     <div id="block-block-64" class="block block-block first odd">
+      <div class="content">
+<a href="/" title="Home" rel="home" id="logo"><img src="/images/cse_banner_0.png" alt="Home" /></a>
+      </div>
+     </div><!-- /.block -->
+     <div id="block-nice-menus-1" class="block block-nice-menus last odd">
+      <div class="content">
+<ul class="nice-menu nice-menu-down" id="nice-menu-1">
+<li id="nice-menu-id-news_events" class="menu-news_events menuparent first"><a href="//www.cs.washington.edu/news_events">News &amp;<br>Events</a></li>
+<li id="nice-menu-id-people" class="menu-people menuparent"><a href="//www.cs.washington.edu/people">People</a></li>
+<li id="nice-menu-id-education" class="menu-education menuparent active-trail"><a  class="active-trail active"href="//www.cs.washington.edu/education">Education</a></li>
+<li id="nice-menu-id-research" class="menu-research menuparent"><a href="//www.cs.washington.edu/research">Research</a></li>
+<li id="nice-menu-id-students" class="menu-students menuparent"><a href="//www.cs.washington.edu/students">Current<br>Students</a></li>
+<li id="nice-menu-id-prospective_students" class="menu-prospective_students menuparent"><a href="//www.cs.washington.edu/prospective_students">Prospective<br>Students</a></li>
+<li id="nice-menu-id-faculty_candidates" class="menu-faculty_candidates menuparent"><a href="//www.cs.washington.edu/faculty_candidates">Faculty<br>Candidates</a></li>
+<li id="nice-menu-id-alumni" class="menu-alumni menuparent"><a href="//www.cs.washington.edu/alumni">Alumni</a></li>
+<li id="nice-menu-id-industrial_affiliates" class="menu-industrial_affiliates menuparent"><a href="//www.cs.washington.edu/industrial_affiliates">Industry<br>Affiliates</a></li>
+<li id="nice-menu-id-supportcse" class="menu-supportcse menuparent"><a href="//www.cs.washington.edu/supportcse">Support<br>CSE</a></li>
+</ul>
+      </div><!-- content -->
+     </div><!-- /.block -->
+    </div><!-- /.region -->
+   </div><!-- section -->
+  </div><!-- /.section, /#header -->
+<div id="main-wrapper">
+ <div id="main" class="clearfix with-navigation">
+  <div id="content" class="column">
+   <div class="section">
+<h1 class="title" id="page-title">CSE 374 - Programming Concepts and Tools - Winter 2015 - Homework 4</h1>
+
+<!--begin HTML content-->
+
+<h2>Due Date</h2>Due: Thursday, February 5, 2015 at 11 PM.
+
+<h2>Objectives</h2>
+<p>The purpose of this assignment is to gain some experience with C programming
+  by implementing a utility program that is similar to <code>grep</code>, but
+  without the ability to process regular expressions (i.e., a lot like a simple
+  version of <code>fgrep</code>). In particular, in this assignment,
+  you will:</p>
+
+<ul>
+  <li>Gain  experience creating and running C programs,</li>
+  <li>Become familiar with some of the basic C libraries, including those for
+    file and string handling,</li>
+  <li>Get a better understanding of how Unix utilities are implemented, and</li>
+  <li>Gain some basic experience with the Unix debugger, <code>gdb</code>.</li>
+</ul>
+<p>This assignment does not include any particularly complicated logic or algorithms,
+  but it will require you to organize your code well and make effective use of
+  the C language and libraries. You will also have to explore the details of
+  the C string and file I/O libraries to discover how to do various operations
+   that should already be familiar from your programming experience in other
+  languages (although the details in C will be different, of course). It is meant
+  as an orientation to the Unix/Linux C programming environment. </p>
+
+<p><strong>You should do
+  this assignment by yourself.</strong></p>
+
+<h2>Assignment</h2>
+<p>This portion of the page is divided into subsections for your convenience:</p>
+<ul>
+	<li><a href="#synopsis">Synopsis</a></li>
+	<li><a href="#techreqts">Technical Requirements</a></li>
+	<li><a href="#codequalreqts">Code Quality Requirements</a></li>
+	<li><a href="#implhints">Implementation Hints</a></li>
+	<li><a href="#debugging">Debugging</a></li>
+	<li><a href="#extracredit">Extra Credit</a></li>
+</ul>
+
+<h3 id="synopsis">Synopsis</h3>
+<p>Implement in C a Unix utility program called <code>gasp</code>.  The command
+<pre>        gasp [options] STRING FILE...</pre> 
+<p>should read the listed files (<code>FILE...</code>) and copy each line from
+  the input  to <code>stdout</code>  if
+  it contains <code>STRING</code>. Each output line should be preceded by the
+  name of the file that contains it. The argument <code>STRING</code> may be
+  any sequence of characters (as expanded, of course, by the shell depending
+  on how it is quoted). There are two available options,
+which may appear in any order if  both are present:</p>
+
+<ul>
+  <li><code>-i</code> Ignore case when searching for lines that contain <code>STRING</code>.
+    If the <code>-i</code> option is used, the strings &quot;<code>this</code>&quot;, &quot;<code>This</code>&quot;, &quot;<code>THIS</code>&quot;, and &quot;<code>thiS</code>&quot;
+
+     all match; if <code>-i</code> is not used, they are all considered different.</li>
+  <li><code>-n</code> Number lines in output. Each line copied to <code>stdout</code> should
+    include the line number in the file where it was found in addition to the
+    file name. The lines in each file are numbered from 1.</li>
+</ul>
+<p>Your program does not need to be able to handle combinations of option letters
+  written as a single multi-character option 
+like <code>-in</code> or <code>-ni</code>. But it does need to be able to handle
+any combination of either or both (or neither) option when they appear separately
+on the command line.</p>
+
+<p>(This is basically the same output produced by <code>grep</code> if
+  the <code>STRING</code>  argument is treated as literal data and not as a regular
+  expression. You should pretty much match the output format of <code>grep</code>,
+  although your program's output does not  need to be byte-for-byte
+  identical. One difference, though, is that a file name should be printed on
+  every output line, even if only one file is specified on the <code>gasp</code> command
+  line.)</p>
+
+<h3 id="techreqts">Technical Requirements</h3>
+<p>Besides the general specification given above, your program should meet
+  the following requirements to receive full credit.</p>
+<ol>
+  <li>Be able to handle input lines containing up to 500 characters (including
+    the terminating <code>\0</code>). This number should  be specified with an appropriate <code>#define</code> preprocessor
+    command so it can be changed easily. Your program is allowed to produce incorrect
+    results or fail if presented with input data containing lines longer
+    than this limit.</li>
+
+  <li>You may assume that the string pattern on the command line is no longer
+    than 100 characters (including the terminating <code>\0</code>). This length
+    should also be specified by an appropriate <code>#define</code>.</li>
+  <li>Use standard C library functions where possible; do not reimplement operations
+    available in the basic libraries. For instance, <code>strncpy</code> in <code>&lt;string.h&gt;</code> can
+    be used to copy <code>\0</code>-terminated
+    strings; you should not be writing loops to copy such strings one character
+    at a time.<br />
+
+    <strong>Exception:</strong> there is a <code>getopt</code> function in the Linux library that
+    provides simplified handling of command line options. <strong>For this assignment,
+    only, you <em>may not use</em> this function.</strong> You should implement the processing
+    of command line options yourself, of course using the string library functions
+    when these are helpful.</li>
+  <li>You should use &quot;safe&quot; versions of file and string handling routines
+    such as <code>fgets</code> and <code>strncpy</code> instead of routines like <code>gets</code> and <code>strcpy</code>.
+    The safe functions allow specification of maximum buffer or array lengths
+    and will not overrun adjacent memory if used properly.</li>
+  <li>For the <code>-i</code> option, two characters are considered to be equal ignoring case
+    if they are the same when translated by the <code>tolower(c)</code> function
+    (or, alternatively,
+    <code>toupper(c)</code>) in <code>&lt;ctype.h&gt;</code>.</li>
+
+  <li>If an error occurs when opening or reading a  file, the program should
+    write an appropriate error message to <code>stderr</code> and continue processing
+    any remaining files on the command line.</li>
+  <li>Your <code>main</code> function must be in a source file named <code>gasp.c</code>. We suggest you put all the functions that make up the program in this file (to keep things simple), but you may have additional source files if you wish.</li>
+  <li>Your code must compile and run  without errors or warnings
+    when compiled and executed on <code>klaatu</code> or the CSE VM using <code>gcc</code> with
+    the <code>-Wall</code> option. Since this assignment should not need to use
+    any unusual or system-dependent code you can almost certainly develop and
+    test your code on any recent Linux system or other system that supports a
+    standard C compiler. However, we will test your submissions using the CSE
+    systems, so you should verify your program there before the submission deadline.</li>
+</ol>
+
+<h3 id="codequalreqts">Code Quality Requirements</h3>
+<p>As with any program you write, your code should be readable and understandable
+  to anyone who knows C. In particular, for full credit
+  your code must observe the following requirements.</p>
+
+<ol>
+  <li>Divide your program into suitable functions, each of which does a single
+    well-defined task. For example, there should almost certainly be a function
+    that processes a single input file, which is called as many times as needed
+    to process  files listed on the command line (and which, in turn, might
+    call other functions to perform identifiable subtasks). <strong>Your program most
+    definitely may not consist of one huge <code>main</code> function
+    that does everything.</strong> However it should not contain tiny functions   that only fragment the code instead of breaking it into coherent pieces. If you wish, you may include all of your functions
+    in a single C source file,
+    since the total size of this program will be fairly small. Be sure to include
+    appropriate function prototypes near the beginning of the file so the actual
+    function definitions can appear in whatever order is most appropriate for
+    presenting the code in the remainder of the file.</li>
+  <li>Comment sensibly, but not excessively. You should not use comments to repeat
+    the obvious or explain how the C language works -- assume that the reader
+    knows C at least as well as you. <strong>Your code should, however, include the
+    following minimum comments:</strong>
+	<ul>
+	<li>Every function must include a heading comment that explains what
+	  the function does (<em>not</em> how it does it), including the significance
+	  of all parameters and any effects on or use of global variables (to the
+	  extent that there are any). It must <em>not</em> be
+	  necessary to read the function code to determine how to call it or what
+	  happens when it is called. (But
+	  these comments do not need to be nearly as verbose as,
+	  for example JavaDoc comments.)</li>
+
+	<li>Every significant variable must include a comment that is sufficient
+	  to understand what information is stored in the variable and how it is
+	  stored. It must <em>not</em> be
+	  necessary to read code that initializes or uses a variable to understand
+	  this. It may be helpful to describe several related variables in a single
+	  comment that explains their contents and relationship.</li>
+	<li>In addition, there should
+	    be a comment at the top of the file giving basic identifying information,
+	    including your name, the date, and the purpose
+    of the file. </li>
+	</ul>
+  </li>
+  <li>Use appropriate names for variables and functions: nouns or noun phrases
+    suggesting the contents of variables or the results of value-returning functions;
+    verbs or verb phrases for <code>void</code> functions
+    that perform an action without returning a value. Variables of local significance
+    like loop counters,
+     indices, or pointers should be given simple names like <code>i</code>, <code>k</code>, <code>n</code>,
+	 or <code>p</code>, and normally do not require further comments.</li>
+
+  <li>No global variables. Use parameters (particularly pointers) appropriately.
+    <strong>Exception:</strong> if you wish, you may have two global variables that indicate whether
+    the <code>-i</code> or <code>-n</code> options
+    are selected or not.</li>
+  <li>No unnecessary computation. For example, if you need to translate the <code>STRING</code>    argument
+    to lower- or upper-case,  translate it (or a copy of it) once;
+    don't do this repeatedly for each input line (inefficient use of processing time).
+     Don't make unnecessary copies of large data structures (inefficient use of memory space);
+    use pointers. (Copies of <code>int</code>s,
+    pointers, and similar things are cheap; copies of arrays and large structs
+    are expensive.) Don't read the input by calling a library function to read
+    each individual character. Read the input a line at a time (it
+    costs just about the same to call an I/O function to read an entire line
+    into a char array as it does to read a single character). But
+    don't overdo it. Your code should be simple and clear, not complex containing
+    lots of micro-optimizations that don't matter.</li>
+
+</ol>
+
+<h3 id="implhints">Implementation Hints</h3>
+<ol>
+  <li>There are a lot of things to get right here; the job may seem overwhelming
+    if you try to do  all of it at once. But if you break it into small tasks,
+    each one of which can be done individually by itself, it should be quite
+    manageable.
+    For instance, figure out how to process a single file before you implement
+    the logic to process all of the files on the command line. Figure out how
+    to open, read, and copy all of a file to <code>stdout</code> before you add
+    the code to search for the <code>STRING</code> argument and selectively print
+    lines containing it. Be able to search for exact matches before adding the <code>-i</code> option. Add the <code>-n</code> option separately when you're not
+    trying to do something else.</li>
+
+  <li>Every time you add something new to your code (see hint #1), test it. Right
+    Now! <em>Immediately!</em> <em>BEFORE YOU DO <strong>ANYTHING</strong> ELSE!!!</em> (Did we
+    mention that you should test new changes right away?) It is much easier to
+    find and fix problems if you can isolate the potential bug
+    to a small section of code you just added
+    or changed. <code>printf</code> is
+    your friend here to print values while debugging. The debugger is also your
+    friend -- learn how to use it.</li>
+  <li>The standard C library contains many functions that you will find useful.
+    In particular, look at the <code>&lt;stdio.h&gt;</code>, <code>&lt;string.h&gt;</code>, <code>&lt;ctype.h&gt;</code> and
+    <code>&lt;stdlib.h&gt;</code> libraries.</li>
+
+  <li>An easy way to implement the <code>-i</code> option is to translate both
+    the <code>STRING</code>    argument
+    and each input line to lowercase, then search for the translated <code>STRING</code> in
+    the translated input line. (Translating a string to lower-case sure sounds
+    like a well-defined operation that should be in a separate function!) However,
+    if the string is found, the original line from the input file should be printed,
+    not the translated one.</li>
+  <li>Be sure to test for errors like trying to open or read a nonexistent file
+    to see if your error handling is working properly.</li>
+  <li>Once you're done, read the instructions again to see if you overlooked
+     anything.</li>
+
+  <li>See #6.</li>
+</ol>
+
+<h3 id="debugging">Debugging</h3>
+<p>Learning how to use a debugger effectively can be a big help in getting
+  your programs to work (<strong>although it is no substitute for thinking and careful
+  programming</strong>). To encourage you to gain a basic familiarity with <code>gdb</code>,
+  you are required to do the following.</p>
+<ol>
+  <li>Be sure your program is compiled with the <code>-g</code> option, to include debugging
+    information in the executable file.</li>
+  <li>Run the <code>script</code> program to capture the following console session
+    in a text file named <code>debug.txt</code>.</li>
+
+  <li>Start <code>gdb</code> with
+      your executable program as an argument.</li>
+  <li>Set two breakpoints: one at the beginning of <code>main</code>, and the
+    other at the point in your program right after the <code>fopen</code> function
+    call that opens the input files.</li>
+  <li>Start your program with the <code>gdb</code> <code>run</code> command, providing a
+    search string and at least one file name as arguments.</li>
+
+  <li>When the program hits the breakpoint at the beginning of <code>main</code>,
+    use the appropriate <code>gdb</code> command to display the contents of the
+    variable  containing the search string (the
+    first argument to the program following any options that are present). When
+    you've done that, continue execution of the program.</li>
+  <li>When the program hits the second breakpoint immediately after opening an
+    input file, use the appropriate <code>gdb</code> commands to display 
+	<ol>
+		<li>a backtrace showing the functions active at the time the breakpoint was reached,</li>
+    	<li>source code showing the line containing the
+    breakpoint and a couple of surrounding lines, </li>
+		<li>the name of the file
+    that was supplied
+    to the <code>fopen</code> function
+    (this string should be in a variable somewhere), and </li>
+		<li>the pointer value
+    returned by <code>fopen</code> (presumably
+    just a hex address, although it might be <code>NULL</code> if the file can't
+    be opened).</li>
+	</ol>
+
+  <li>Continue execution of the program until it stops, then quit <code>gdb</code> and
+    exit from the <code>script</code> program's shell. Save the <code>debug.txt</code> output
+    file from <code>script</code> to turn
+    in later.</li>
+</ol>
+
+<h3 id="extracredit">Extra Credit</h3>
+
+<p>A small amount of extra credit will be awarded for adding the following extensions
+  to an already complete, working assignment. No extra credit will be awarded
+  if the basic program is not fully implemented and substantially bug-free (see the Extra Credit Policy in the Syllabus).</p>
+<p>If you do any extra credit parts, you should turn in both your original program
+  without the extra credit and your extended program. The extra credit version
+   should be in a separate file whose name ends with &quot;-extra&quot;, like <code>gasp-extra.c</code>.</p>
+<ul>
+  <li>Allow  input file names to be omitted from the command line. In this
+    case, when no filenames are given the program should read data from <code>stdin</code>.
+    This should be fairly easy to add if your code is organized as a well-designed
+    collection of functions.</li>
+  <li>Add an option <code>-w</code> to search for words separated by whitespace.
+    If <code>-w</code> is
+    specified, the <code>STRING</code> on the <code>gasp</code> command line
+    should only be found  if it is surrounded by whitespace (blanks,
+    tabs, newlines, etc.) in the input file(s) and not as part of some other string. For example, the <code>STRING foo</code> would match <code>foo</code> but not <code>food</code>. A character <code>c</code> in
+    the input should be treated as whitespace if the library function call <code>isspace(c)</code> returns
+    true. If you implement this option, the program should find the word if it
+    appears at the beginning or end of a line, as well as in the middle. You
+    may also use an additional global variable to record the state of this option
+    if you wish.</li>
+
+  <li>Enhance your program so it can deal safely with input
+    files containing lines of an arbitrary length. Lines longer than the program
+    is prepared to
+    handle may be truncated by discarding excess input characters, but doing
+    so should not cause the <code>-n</code> option to count  line numbers incorrectly.
+    However you decide to implement this, long input lines should not cause your
+    program to fail or crash.</li>
+  <li>A bit harder than above: Enhance your program so it correctly deals with
+    input lines of any length, copying them to the output if they contain the
+    <code>STRING</code> parameter anywhere in the line. If you read arbitrarily
+    long input lines in chunks that have only part of an input line, be sure
+    you can correctly handle situations where the <code>STRING</code>  value
+    spans two parts of the line instead of falling entirely inside one chunk.</li>
+</ul>
+
+<h2>Assessment</h2>
+
+Your solutions should be</p>
+<ul>
+  <li>Correct source files, etc., that compile and run without errors or warnings when compiled and executed on our reference systems (<code>klaatu</code> and the CSE virtual machine) using <code>gcc</code> with the <code>-Wall</code> option.</li>
+  <li>In good style, including indentation and line breaks, and following the given <a href="#techreqts">Technical Requirements</a> and <a href="#codequalreqts">Code Quality Requirements</a>.
+</ul>
+
+<p>Identifying information including 
+<ul>
+  <li>your name, </li>
+  <li>CSE 374 Homework 4, </li>
+  <li>the date, and </li>
+  <li>the purpose of the file</li>
+</ul>
+should appear as comments at the top of each of your files.
+
+<h2>Turn-in Instructions</h2>
+<p>Use the regular online dropbox
+      to turn in 
+
+<ul>
+	<li>the source code to your program (file <code>gasp.c</code> and any other source files if you have them),  </li>
+	<li>a copy of the <code>script</code> (console)
+      output file <code>debug.txt</code> from the <a href="#debugging">Debugging</a> exercise above, and  </li>
+	<li>a plain text file named <code>README</code> that
+	      either describes any extra credit that you added to your program, or contains
+	       a brief note that you did not implement any of the extra credit parts.</li>
+</ul>
+<p>If you did any <a href="#extracredit">Extra Credit</a>, you should turn in a separate source file with
+      your additions (see the Extra Credit Policy in the Syllabus). </p>
+      
+<p>Be sure your name is included in the source code, <code>debug.txt</code>, and <code>README</code> files.  Verify that the file(s) uploaded to the dropbox are the correct ones.</p>
+
+<!--end HTML content-->
+             </div><!-- section -->
+          </div><!-- content -->
+
+          <div id="legalese-footer">
+            <div class="region region-legalese-footer">
+              <div id="block-block-1" class="block block-block first last odd">
+                <div class="content">
+                  <p class="legalese">Computer Science &amp; Engineering <br/>
+                  University of Washington <br/> Box 352350 <br/>
+                  Seattle, WA 98195-2350 <br/> (206) 543-1695 voice, (206) 543-2969 FAX
+                  </p>
+                  <p class="legalese">
+                    <a href="//www.washington.edu/online/privacy" target="_blank">UW Privacy Policy</a> and 
+                    <a href="//www.washington.edu/online/terms" target="_blank">UW Site Use Agreement</a>
+                  </p>
+                </div><!-- content -->
+              </div><!-- /.block -->
+            </div><!-- /.region -->
+          </div><!-- legalese-footer -->
+        </div><!-- /#page -->
+      </div><!-- /#page-wrapper -->
+    </div>
+  </div>
+</body>
+</html>
